@@ -1,0 +1,61 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1 th:text="'Turno #' + ${turno.id}">Turno</h1>
+
+  <div class="card" role="alert" th:if="${fieldErrors} != null and !${fieldErrors.isEmpty()}">
+    <ul>
+      <li class="error" th:each="e : ${fieldErrors}" th:text="${e.key} + ': ' + ${e.value}">error</li>
+    </ul>
+    <div th:if="${sugeridos} != null and !${sugeridos.isEmpty()}">
+      <p>Horarios sugeridos:</p>
+      <ul class="sugeridos">
+        <li th:each="s : ${sugeridos}" th:text="${s}">10:30</li>
+      </ul>
+    </div>
+  </div>
+
+  <dl class="card">
+    <dt>Paciente</dt>
+    <dd th:text="${turno.paciente.apellido} + ', ' + ${turno.paciente.nombre}">Pérez, Juan</dd>
+    <dt>Profesional</dt>
+    <dd th:text="${turno.profesional.apellido} + ', ' + ${turno.profesional.nombre}">Gómez, Ana</dd>
+    <dt>Especialidad</dt>
+    <dd th:text="${turno.especialidad.nombre}">Ortodoncia</dd>
+    <dt>Fecha</dt>
+    <dd th:text="${turno.fecha}">2026-10-12</dd>
+    <dt>Hora</dt>
+    <dd th:text="${turno.horaInicio} + ' – ' + ${turno.horaFin}">09:00</dd>
+    <dt>Estado</dt>
+    <dd><span th:replace="~{fragments/badges :: badge(${turno.estado})}"></span></dd>
+    <dt th:if="${turno.motivoCancelacion} != null">Motivo</dt>
+    <dd th:if="${turno.motivoCancelacion} != null" th:text="${turno.motivoCancelacion}">motivo</dd>
+  </dl>
+
+  <form th:if="${canCancelar}" th:action="@{'/turnos/' + ${turno.id} + '/cancelar'}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="campo">
+      <label th:for="'motivo-' + ${turno.id}" for="motivo">Motivo de cancelación (opcional)</label>
+      <input type="text" id="motivo" th:id="'motivo-' + ${turno.id}" name="motivo"/>
+    </div>
+    <button type="submit">Cancelar turno</button>
+  </form>
+
+  <form th:if="${canAtendido}" th:action="@{'/turnos/' + ${turno.id} + '/atendido'}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit">Marcar atendido</button>
+  </form>
+
+  <form th:if="${canReprogramar}" th:action="@{'/turnos/' + ${turno.id} + '/reprogramar'}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="campo">
+      <label th:for="'nf-' + ${turno.id}" for="nf">Nueva fecha</label>
+      <input type="date" id="nf" th:id="'nf-' + ${turno.id}" name="nuevaFecha"/>
+      <span class="error" th:if="${fieldErrors['nuevaFecha']}" th:text="${fieldErrors['nuevaFecha']}"></span>
+    </div>
+    <div class="campo">
+      <label th:for="'nh-' + ${turno.id}" for="nh">Nueva hora (HH:MM)</label>
+      <input type="text" id="nh" th:id="'nh-' + ${turno.id}" name="nuevaHora" placeholder="10:30"/>
+      <span class="error" th:if="${fieldErrors['nuevaHora']}" th:text="${fieldErrors['nuevaHora']}"></span>
+    </div>
+    <button type="submit">Reprogramar</button>
+  </form>
+</div>

@@ -1,0 +1,254 @@
+{
+  "version": 4,
+  "step": "done",
+  "owner": "active-orchestrator",
+  "discovery": {
+    "skipped": true
+  },
+  "kb": {
+    "created_by": "kb-creator",
+    "source": "interactive",
+    "discovery": {
+      "problem": "centralizar y agilizar la gestion de turnos para una clinica odontologica, evitando superposiciones y desorganizacion en la atencion",
+      "system_type": "web_app",
+      "domain": "odontologia",
+      "scale": "team",
+      "stack": "Java/Spring Boot or Python/Django + MySQL",
+      "needs_infra": true
+    },
+    "files": [
+      "knowledge-base/01_vision_y_objetivos.md",
+      "knowledge-base/02_descripcion_general.md",
+      "knowledge-base/03_actores_y_roles.md",
+      "knowledge-base/04_modelo_de_datos.md",
+      "knowledge-base/05_reglas_de_negocio.md",
+      "knowledge-base/06_funcionalidades.md",
+      "knowledge-base/07_flujos_principales.md",
+      "knowledge-base/08_arquitectura_propuesta.md",
+      "knowledge-base/09_decisiones_y_supuestos.md",
+      "knowledge-base/10_preguntas_abiertas.md",
+      "knowledge-base/README.md"
+    ]
+  },
+  "roadmap": {
+    "created_by": "roadmap-generator",
+    "source": "CHANGES.md",
+    "changes": [
+      "C-01",
+      "C-02",
+      "C-03",
+      "C-04",
+      "C-05",
+      "C-06",
+      "C-07",
+      "C-08",
+      "C-09",
+      "C-10",
+      "C-11",
+      "C-12"
+    ]
+  },
+  "registry": {
+    "created_by": "skill-registry",
+    "registry_path": ".atl/skill-registry.md",
+    "skills_scanned": 6,
+    "skills_found": [
+      "springboot-patterns",
+      "springboot-security",
+      "database-migrations",
+      "mysql",
+      "frontend-design",
+      "webapp-testing"
+    ],
+    "skills_paths": [
+      "/home/dev/.agents/skills/springboot-patterns/SKILL.md",
+      "/home/dev/.agents/skills/springboot-security/SKILL.md",
+      "/home/dev/.agents/skills/database-migrations/SKILL.md",
+      "/home/dev/.agents/skills/mysql/SKILL.md",
+      "/home/dev/.agents/skills/frontend-design/SKILL.md",
+      "/home/dev/.agents/skills/webapp-testing/SKILL.md"
+    ],
+    "conventions_found": [],
+    "compact_rules_generated": 6,
+    "engram_saved": false,
+    "engram_reason": "engram MCP not available (no resources)",
+    "file": ".atl/skill-registry.md"
+  },
+  "skills": {
+    "recommended": [
+      {
+        "skill": "java-springboot",
+        "repo": "github/awesome-copilot@java-springboot",
+        "source": "https://skills.sh/github/awesome-copilot/java-springboot",
+        "installs": "20.8K",
+        "install_command": "npx skills add github/awesome-copilot@java-springboot",
+        "why": "Variante A Java/Spring Boot scaffolding para C-01 foundation-setup y C-02 core-models-usuario"
+      },
+      {
+        "skill": "springboot-patterns",
+        "repo": "affaan-m/ecc@springboot-patterns",
+        "source": "https://skills.sh/affaan-m/ecc/springboot-patterns",
+        "installs": "12.2K",
+        "install_command": "npx skills add affaan-m/ecc@springboot-patterns",
+        "why": "Patrones Controller→Service→Repository + DTOs para mantenibilidad P5:b (C-02..C-10)"
+      },
+      {
+        "skill": "springboot-security",
+        "repo": "affaan-m/ecc@springboot-security",
+        "source": "https://skills.sh/affaan-m/ecc/springboot-security",
+        "installs": "11K",
+        "install_command": "npx skills add affaan-m/ecc@springboot-security",
+        "why": "Spring Security RBAC 4 roles, bcrypt, session/JWT para C-03 auth-login-rbac (RN-AU-01..06)"
+      },
+      {
+        "skill": "spring-boot-security-jwt",
+        "repo": "giuseppe-trisciuoglio/developer-kit@spring-boot-security-jwt",
+        "source": "https://skills.sh/giuseppe-trisciuoglio/developer-kit/spring-boot-security-jwt",
+        "installs": "4K",
+        "install_command": "npx skills add giuseppe-trisciuoglio/developer-kit@spring-boot-security-jwt",
+        "why": "JWT access+refresh en cookie HttpOnly Secure para variante SPA (alternativa a sesión SSR en C-03)"
+      },
+      {
+        "skill": "django-patterns",
+        "repo": "affaan-m/ecc@django-patterns",
+        "source": "https://skills.sh/affaan-m/ecc/django-patterns",
+        "installs": "11.9K",
+        "install_command": "npx skills add affaan-m/ecc@django-patterns",
+        "why": "Variante B Django apps usuarios/pacientes/catalogo/agenda para C-01..C-10"
+      },
+      {
+        "skill": "django-expert",
+        "repo": "vintasoftware/django-ai-plugins@django-expert",
+        "source": "https://skills.sh/vintasoftware/django-ai-plugins/django-expert",
+        "installs": "5.6K",
+        "install_command": "npx skills add vintasoftware/django-ai-plugins@django-expert",
+        "why": "Django ORM, forms/serializers y auth complementario variante B"
+      },
+      {
+        "skill": "database-migrations",
+        "repo": "affaan-m/ecc@database-migrations",
+        "source": "https://skills.sh/affaan-m/ecc/database-migrations",
+        "installs": "10.6K",
+        "install_command": "npx skills add affaan-m/ecc@database-migrations",
+        "why": "Flyway V1..V7 / Django migrations versionadas, validate en prod (C-01, C-12)"
+      },
+      {
+        "skill": "mysql",
+        "repo": "planetscale/database-skills@mysql",
+        "source": "https://skills.sh/planetscale/database-skills/mysql",
+        "installs": "8.2K",
+        "install_command": "npx skills add planetscale/database-skills@mysql",
+        "why": "MySQL 8.0 schema, índices Turno (profesional_id,fecha,hora) y constraints RN-TU-01/05 (C-08 crítico)"
+      },
+      {
+        "skill": "sql-optimization",
+        "repo": "github/awesome-copilot@sql-optimization",
+        "source": "https://skills.sh/github/awesome-copilot/sql-optimization",
+        "installs": "15K",
+        "install_command": "npx skills add github/awesome-copilot@sql-optimization",
+        "why": "Optimizar query no-solape (hora_inicio < fin AND hora_fin > inicio) y transacción ACID serializable C-08"
+      },
+      {
+        "skill": "docker-patterns",
+        "repo": "affaan-m/ecc@docker-patterns",
+        "source": "https://skills.sh/affaan-m/ecc/docker-patterns",
+        "installs": "12.7K",
+        "install_command": "npx skills add affaan-m/ecc@docker-patterns",
+        "why": "docker-compose app+mysql, wait-for-db y volúmenes persistentes para needs_infra true (C-01)"
+      },
+      {
+        "skill": "multi-stage-dockerfile",
+        "repo": "github/awesome-copilot@multi-stage-dockerfile",
+        "source": "https://skills.sh/github/awesome-copilot/multi-stage-dockerfile",
+        "installs": "28.6K",
+        "install_command": "npx skills add github/awesome-copilot@multi-stage-dockerfile",
+        "why": "Dockerfile multi-stage (Maven build / python slim) para deploy team scale"
+      },
+      {
+        "skill": "auth-implementation-patterns",
+        "repo": "wshobson/agents@auth-implementation-patterns",
+        "source": "https://skills.sh/wshobson/agents/auth-implementation-patterns",
+        "installs": "17.8K",
+        "install_command": "npx skills add wshobson/agents@auth-implementation-patterns",
+        "why": "Login rate-limit 5/60s, error genérico 401, redirección por rol y GET /api/auth/me (C-03)"
+      },
+      {
+        "skill": "security-and-hardening",
+        "repo": "addyosmani/agent-skills@security-and-hardening",
+        "source": "https://skills.sh/addyosmani/agent-skills/security-and-hardening",
+        "installs": "54.6K",
+        "install_command": "npx skills add addyosmani/agent-skills@security-and-hardening",
+        "why": "Hardening CSRF/CORS, secrets .env, zona horaria America/Argentina/Buenos_Aires (C-12)"
+      },
+      {
+        "skill": "api-and-interface-design",
+        "repo": "addyosmani/agent-skills@api-and-interface-design",
+        "source": "https://skills.sh/addyosmani/agent-skills/api-and-interface-design",
+        "installs": "48.5K",
+        "install_command": "npx skills add addyosmani/agent-skills@api-and-interface-design",
+        "why": "Diseño REST DTOs TurnoCreateRequest/response y envelope error 400/409 con sugeridos (C-08..C-10)"
+      },
+      {
+        "skill": "frontend-design",
+        "repo": "anthropics/skills@frontend-design",
+        "source": "https://skills.sh/anthropics/skills/frontend-design",
+        "installs": "964.4K",
+        "install_command": "npx skills add anthropics/skills@frontend-design",
+        "why": "UI web_app responsive shell + agenda día/semana, TurnoCard, EstadoBadge, HuecosLibres (C-11)"
+      },
+      {
+        "skill": "webapp-testing",
+        "repo": "anthropics/skills@webapp-testing",
+        "source": "https://skills.sh/anthropics/skills/webapp-testing",
+        "installs": "172.8K",
+        "install_command": "npx skills add anthropics/skills@webapp-testing",
+        "why": "Testing unit+integración Testcontainers MySQL para flujos C-02/C-08 (team scale)"
+      },
+      {
+        "skill": "playwright-best-practices",
+        "repo": "currents-dev/playwright-best-practices-skill@playwright-best-practices",
+        "source": "https://skills.sh/currents-dev/playwright-best-practices-skill/playwright-best-practices",
+        "installs": "91.2K",
+        "install_command": "npx skills add currents-dev/playwright-best-practices-skill@playwright-best-practices",
+        "why": "E2E Playwright para Flujos 1-5 (reserva/cancelar/reprogramar/atendido) exigidos en C-11"
+      }
+    ],
+    "installed": [
+      "springboot-patterns",
+      "springboot-security",
+      "database-migrations",
+      "mysql",
+      "frontend-design",
+      "webapp-testing"
+    ],
+    "install_attempted": [
+      "java-springboot",
+      "springboot-patterns",
+      "springboot-security",
+      "database-migrations",
+      "mysql",
+      "frontend-design",
+      "webapp-testing"
+    ],
+    "install_error": "java-springboot timeout cloning github/awesome-copilot (large repo) — 6/7 installed, 1 skipped. PromptScript global warning is non-blocking (skills available in ~/.agents/skills)"
+  },
+  "agents": {
+    "created_by": "agent-instruction",
+    "files": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "reglas_applied": [
+      "NUNCA commitear sin pedido",
+      "NUNCA buildear sin pedido",
+      "conventional commits español",
+      "DTOs con @Valid, no exponer JPA",
+      "constructor injection",
+      "migracion NOT NULL con default, forward-only",
+      "secrets via env vars, .env no commiteado",
+      "turno en TX ACID con query no-solape",
+      "zona horaria America/Argentina/Buenos_Aires",
+      "DB real/Testcontainers, no mocks"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+<header class="app-header" th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+  <div class="container header-inner">
+    <p class="app-title">Turnos Odontología</p>
+    <div class="userbox" th:if="${username} != null and ${username} != '' and ${username} != 'anonymousUser'">
+      <span th:text="${username}">usuario</span>
+      <span class="badge badge-reservado" th:text="${rol}">ROL</span>
+      <form th:action="@{/api/auth/logout}" method="post" data-logout="true">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit">Salir</button>
+      </form>
+    </div>
+    <div class="userbox" th:if="${username} == null or ${username} == '' or ${username} == 'anonymousUser'">
+      <a th:href="@{/login}">Ingresar</a>
+    </div>
+  </div>
+</header>

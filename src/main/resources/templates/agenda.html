@@ -1,0 +1,52 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1>Agenda</h1>
+  <p>
+    <a th:href="@{/agenda(fecha=${fecha},profesional=${profesionalId},vista='dia')}">Día</a>
+    |
+    <a th:href="@{/agenda(fecha=${fecha},profesional=${profesionalId},vista='semana')}">Semana</a>
+  </p>
+  <form class="filtros" th:action="@{/agenda}" method="get">
+    <div class="campo">
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" name="fecha" th:value="${fecha}"/>
+    </div>
+    <div class="campo">
+      <label for="filtroProfesional">Profesional</label>
+      <select id="filtroProfesional" name="profesional">
+        <option value="">Todos</option>
+        <option th:each="p : ${profesionales}" th:value="${p.id}"
+                th:selected="${profesionalId} != null and ${profesionalId} == ${p.id}"
+                th:text="${p.apellido} + ', ' + ${p.nombre}">Gómez, Ana</option>
+      </select>
+    </div>
+    <input type="hidden" name="vista" th:value="${modo}"/>
+    <div class="campo">
+      <button type="submit">Filtrar</button>
+    </div>
+  </form>
+
+  <section th:if="${modo} == 'dia'">
+    <h2 th:text="'Día ' + ${fecha}">Día</h2>
+    <p class="vacio" th:if="${#lists.isEmpty(turnos)}">Sin turnos este día</p>
+    <ul class="agenda-lista" th:unless="${#lists.isEmpty(turnos)}">
+      <li th:each="t : ${turnos}">
+        <div th:replace="~{fragments/turno :: card(${t})}"></div>
+      </li>
+    </ul>
+    <div th:if="${profesionalId} != null" th:replace="~{fragments/agenda :: huecos(${libres})}"></div>
+  </section>
+
+  <section th:if="${modo} == 'semana'">
+    <h2 th:text="'Semana ' + ${fecha} + ' al ' + ${fechaFin}">Semana</h2>
+    <div th:each="d : ${dias}">
+      <h3 th:text="${d.fecha}">2026-10-12</h3>
+      <p class="vacio" th:if="${#lists.isEmpty(d.turnos)}">Sin turnos este día</p>
+      <ul class="agenda-lista" th:unless="${#lists.isEmpty(d.turnos)}">
+        <li th:each="t : ${d.turnos}">
+          <div th:replace="~{fragments/turno :: card(${t})}"></div>
+        </li>
+      </ul>
+      <div th:if="${profesionalId} != null" th:replace="~{fragments/agenda :: huecos(${d.libres})}"></div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,72 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1>Nuevo turno</h1>
+
+  <div class="card" role="alert" th:if="${fieldErrors} != null and !${fieldErrors.isEmpty()}">
+    <p class="error">Revisá los datos del formulario</p>
+    <ul>
+      <li class="error" th:each="e : ${fieldErrors}" th:text="${e.key} + ': ' + ${e.value}">error</li>
+    </ul>
+    <div th:if="${sugeridos} != null and !${sugeridos.isEmpty()}">
+      <p>Horarios sugeridos:</p>
+      <ul class="sugeridos">
+        <li th:each="s : ${sugeridos}" th:text="${s}">10:30</li>
+      </ul>
+    </div>
+  </div>
+
+  <form th:action="@{/turnos/nuevo}" method="get">
+    <div th:replace="~{fragments/forms :: autocomplete(${form.pacienteBusqueda})}"></div>
+    <input type="hidden" name="profesional" th:value="${form.profesionalId}"/>
+    <input type="hidden" name="fecha" th:value="${form.fecha}"/>
+    <input type="hidden" name="paciente" th:value="${form.pacienteId}"/>
+    <button type="submit" class="btn-secundario">Buscar paciente</button>
+  </form>
+
+  <form th:action="@{/turnos/nuevo}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="campo">
+      <label for="pacienteId">Paciente</label>
+      <select id="pacienteId" name="pacienteId">
+        <option value="">— Elegir —</option>
+        <option th:each="p : ${pacientes}" th:value="${p.id}"
+                th:selected="${form.pacienteId} != null and ${form.pacienteId} == ${p.id} ? true : false"
+                th:text="${p.apellido} + ', ' + ${p.nombre} + ' (' + ${p.dni} + ')'">Pérez, Juan</option>
+      </select>
+      <span class="error" th:if="${fieldErrors['pacienteId']}" th:text="${fieldErrors['pacienteId']}"></span>
+    </div>
+    <div th:replace="~{fragments/forms :: profesionalSelect(${profesionales}, ${form.profesionalId})}"></div>
+    <span class="error" th:if="${fieldErrors['profesionalId']}" th:text="${fieldErrors['profesionalId']}"></span>
+    <div class="campo">
+      <label for="especialidadId">Especialidad</label>
+      <select id="especialidadId" name="especialidadId">
+        <option value="">— Elegir —</option>
+        <option th:each="e : ${especialidades}" th:value="${e.id}"
+                th:selected="${form.especialidadId} != null and ${form.especialidadId} == ${e.id} ? true : false"
+                th:text="${e.nombre}">Ortodoncia</option>
+      </select>
+      <span class="error" th:if="${fieldErrors['especialidadId']}" th:text="${fieldErrors['especialidadId']}"></span>
+    </div>
+    <div class="campo">
+      <label for="fechaTurno">Fecha</label>
+      <input type="date" id="fechaTurno" name="fecha" th:value="${form.fecha}"/>
+      <span class="error" th:if="${fieldErrors['fecha']}" th:text="${fieldErrors['fecha']}"></span>
+    </div>
+    <div class="campo" th:if="${slots} != null and !${slots.isEmpty()}">
+      <label for="horaInicio">Hora</label>
+      <select id="horaInicio" name="horaInicio">
+        <option value="">— Elegir —</option>
+        <option th:each="s : ${slots}" th:value="${s}"
+                th:selected="${form.horaInicio} != null and ${form.horaInicio} == ${s} ? true : false"
+                th:text="${s}">09:30</option>
+      </select>
+      <span class="error" th:if="${fieldErrors['horaInicio']}" th:text="${fieldErrors['horaInicio']}"></span>
+    </div>
+    <div class="campo" th:if="${slots} == null or ${slots.isEmpty()}">
+      <label for="horaInicioTxt">Hora (HH:MM)</label>
+      <input type="text" id="horaInicioTxt" name="horaInicio" th:value="${form.horaInicio}" placeholder="09:30"/>
+      <span class="error" th:if="${fieldErrors['horaInicio']}" th:text="${fieldErrors['horaInicio']}"></span>
+      <p class="vacio">Elegí profesional y fecha para ver los horarios libres.</p>
+    </div>
+    <button type="submit">Reservar</button>
+  </form>
+</div>

@@ -1,0 +1,19 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1 th:text="'Paciente: ' + ${paciente.apellido} + ', ' + ${paciente.nombre}">Paciente</h1>
+  <dl class="card">
+    <dt>DNI</dt>
+    <dd th:text="${paciente.dni}">11111111</dd>
+    <dt>Teléfono</dt>
+    <dd th:text="${paciente.telefono} ?: '—'">—</dd>
+    <dt>Email</dt>
+    <dd th:text="${paciente.email} ?: '—'">—</dd>
+  </dl>
+  <h2>Historial de turnos</h2>
+  <p class="vacio" th:if="${#lists.isEmpty(historial)}">Sin turnos registrados</p>
+  <ul class="agenda-lista" th:unless="${#lists.isEmpty(historial)}">
+    <li th:each="t : ${historial}">
+      <div th:replace="~{fragments/turno :: card(${t})}"></div>
+    </li>
+  </ul>
+  <p><a th:href="@{/turnos/nuevo(paciente=${paciente.id})}">Nuevo turno para este paciente</a></p>
+</div>

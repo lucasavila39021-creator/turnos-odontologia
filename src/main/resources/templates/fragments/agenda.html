@@ -1,0 +1,8 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <section th:fragment="huecos(libres)" aria-label="Huecos libres">
+    <h3>Huecos libres</h3>
+    <ul class="huecos">
+      <li th:each="h : ${libres}" th:text="${h}">09:30</li>
+    </ul>
+  </section>
+</div>

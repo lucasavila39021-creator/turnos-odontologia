@@ -1,0 +1,18 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <div class="campo" th:fragment="autocomplete(busqueda)">
+    <label for="pacienteBusqueda">Buscar paciente por DNI o apellido</label>
+    <input type="text" id="pacienteBusqueda" name="pacienteBusqueda"
+           data-autocomplete-pacientes="true"
+           th:value="${busqueda}" placeholder="DNI o apellido"/>
+    <p class="vacio">Sin JavaScript usá el selector de abajo (lista server-side).</p>
+  </div>
+  <div class="campo" th:fragment="profesionalSelect(profesionales, elegido)">
+    <label for="profesionalId">Profesional</label>
+    <select id="profesionalId" name="profesionalId">
+      <option value="">— Elegir —</option>
+      <option th:each="p : ${profesionales}" th:value="${p.id}"
+              th:selected="${elegido} != null and ${elegido} == ${p.id} ? true : false"
+              th:text="${p.apellido} + ', ' + ${p.nombre}">Gómez, Ana</option>
+    </select>
+  </div>
+</div>

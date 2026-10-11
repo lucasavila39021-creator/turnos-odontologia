@@ -1,0 +1,10 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1>Solicitud inválida</h1>
+  <div class="card" role="alert" th:if="${fieldErrors} != null and !${fieldErrors.isEmpty()}">
+    <ul>
+      <li class="error" th:each="e : ${fieldErrors}" th:text="${e.key} + ': ' + ${e.value}">error</li>
+    </ul>
+  </div>
+  <p th:if="${detalle}" th:text="${detalle}">detalle</p>
+  <p><a th:href="@{/agenda}">Volver a la agenda</a></p>
+</div>

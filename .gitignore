@@ -1,0 +1,41 @@
+# Env / secrets
+.env
+
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# Python (si se usa tooling auxiliar)
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker
+.docker/
+
+# Testcontainers
+.testcontainers.properties

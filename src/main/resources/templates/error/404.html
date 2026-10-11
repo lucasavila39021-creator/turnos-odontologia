@@ -1,0 +1,6 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1>No encontrado</h1>
+  <p class="error">Recurso no encontrado</p>
+  <p th:if="${detalle}" th:text="${detalle}">detalle</p>
+  <p><a th:href="@{/agenda}">Volver a la agenda</a></p>
+</div>

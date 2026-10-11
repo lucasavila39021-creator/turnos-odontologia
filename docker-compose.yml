@@ -1,0 +1,59 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: turnos-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-turnos_db}
+      MYSQL_USER: ${DB_USER:-turnos_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme_root}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER:-turnos_user}", "-p${DB_PASSWORD:-changeme}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: turnos-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-turnos_db}
+      DB_USER: ${DB_USER:-turnos_user}
+      DB_PASSWORD: ${DB_PASSWORD:-changeme}
+      APP_SECRET: ${APP_SECRET:-changeme-dev-secret-32-chars-min}
+      APP_TIMEZONE: ${APP_TIMEZONE:-America/Argentina/Buenos_Aires}
+      APP_TURNO_DURACION_MIN: ${APP_TURNO_DURACION_MIN:-30}
+      APP_HORARIO_DESDE: ${APP_HORARIO_DESDE:-08:00}
+      APP_HORARIO_HASTA: ${APP_HORARIO_HASTA:-18:00}
+      PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "${PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+volumes:
+  mysql_data:
+    driver: local

@@ -1,0 +1,12 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <article th:fragment="card(turno)" class="turno-card" th:classappend="' turno-card-' + ${#strings.toLowerCase(turno.estado)}">
+    <p>
+      <strong th:text="${turno.fecha} + ' ' + ${turno.horaInicio}">2026-10-12 09:00</strong>
+      <span th:replace="~{fragments/badges :: badge(${turno.estado})}"></span>
+    </p>
+    <p>Paciente: <span th:text="${turno.paciente.apellido} + ', ' + ${turno.paciente.nombre}">Pérez, Juan</span></p>
+    <p>Profesional: <span th:text="${turno.profesional.apellido} + ', ' + ${turno.profesional.nombre}">Gómez, Ana</span></p>
+    <p>Especialidad: <span th:text="${turno.especialidad.nombre}">Ortodoncia</span></p>
+    <p><a th:href="@{'/turnos/' + ${turno.id}}">Ver detalle</a></p>
+  </article>
+</div>

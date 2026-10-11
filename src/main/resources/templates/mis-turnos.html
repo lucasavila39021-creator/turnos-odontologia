@@ -1,0 +1,10 @@
+<div th:fragment="contenido" xmlns:th="http://www.thymeleaf.org">
+  <h1>Mis turnos</h1>
+  <p class="vacio" th:if="${#lists.isEmpty(turnos)}">Sin turnos próximos</p>
+  <ul class="agenda-lista" th:unless="${#lists.isEmpty(turnos)}">
+    <li th:each="t : ${turnos}">
+      <div th:replace="~{fragments/turno :: card(${t})}"></div>
+    </li>
+  </ul>
+  <p><a th:href="@{/turnos/nuevo}">Nuevo turno</a></p>
+</div>

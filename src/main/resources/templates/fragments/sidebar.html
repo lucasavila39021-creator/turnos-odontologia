@@ -1,0 +1,14 @@
+<aside class="sidebar" th:fragment="sidebar" xmlns:th="http://www.thymeleaf.org">
+  <nav aria-label="Navegación principal">
+    <a th:href="@{/login}" th:if="${rol} == null or ${rol} == 'ANONIMO'">Ingresar</a>
+    <a th:href="@{/mis-turnos}" th:if="${rol} == 'PACIENTE'">Mis turnos</a>
+    <a th:href="@{/turnos/nuevo}" th:if="${rol} == 'PACIENTE'">Nuevo turno</a>
+    <a th:href="@{/agenda}" th:if="${rol} == 'ODONTOLOGO'">Mi agenda</a>
+    <a th:href="@{/agenda}" th:if="${rol} == 'SECRETARIA' or ${rol} == 'ADMIN'">Agenda</a>
+    <a th:href="@{/turnos/nuevo}" th:if="${rol} == 'SECRETARIA' or ${rol} == 'ADMIN'">Nuevo turno</a>
+    <a th:href="@{/pacientes}" th:if="${rol} == 'SECRETARIA' or ${rol} == 'ADMIN'">Pacientes</a>
+    <span class="pendiente" th:if="${rol} == 'ADMIN'" title="Disponible en C-12">Usuarios</span>
+    <span class="pendiente" th:if="${rol} == 'ADMIN'" title="Disponible en C-12">Especialidades</span>
+    <span class="pendiente" th:if="${rol} == 'ADMIN'" title="Disponible en C-12">Profesionales</span>
+  </nav>
+</aside>

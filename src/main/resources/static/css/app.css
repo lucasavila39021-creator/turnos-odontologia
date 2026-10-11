@@ -1,0 +1,92 @@
+/* Turnos Odontología — estilos mobile-first (C-11, CSP-safe: sin CDN externo).
+ * Clases compatibles con la nomenclatura Bootstrap usada en los asserts. */
+:root {
+  --azul: #0d6efd;
+  --verde: #198754;
+  --gris: #6c757d;
+  --rojo: #dc3545;
+  --fondo: #f8f9fa;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--fondo);
+  color: #212529;
+  font-size: 16px;
+}
+.container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
+.app-header {
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.5rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.app-title { font-size: 1.1rem; font-weight: 700; margin: 0; }
+.header-inner { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.userbox { margin-left: auto; display: flex; gap: 0.5rem; align-items: center; }
+.layout { display: flex; flex-direction: column; gap: 1rem; padding: 1rem 0 2rem; }
+.sidebar { background: #fff; border: 1px solid #dee2e6; border-radius: 0.5rem; padding: 0.75rem; }
+.sidebar nav { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.sidebar a, .sidebar span {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--azul);
+  border: 1px solid transparent;
+}
+.sidebar a:hover { border-color: var(--azul); }
+.sidebar .pendiente { color: var(--gris); }
+main { min-width: 0; }
+.card, .turno-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.turno-card-reservado { border-left: 4px solid var(--azul); }
+.turno-card-cancelado { border-left: 4px solid var(--gris); opacity: 0.85; }
+.turno-card-atendido { border-left: 4px solid var(--verde); }
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.badge-reservado { background: #cfe2ff; color: #052c65; }
+.badge-cancelado { background: #e2e3e5; color: #41464b; text-decoration: line-through; }
+.badge-atendido { background: #d1e7dd; color: #0a3622; }
+.agenda-lista { list-style: none; padding: 0; margin: 0; }
+.filtros { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; align-items: end; }
+.campo { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; }
+label { font-weight: 600; }
+input, select, button { font-size: 1rem; padding: 0.45rem 0.6rem; max-width: 100%; }
+button, .btn {
+  background: var(--azul);
+  color: #fff;
+  border: 1px solid var(--azul);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-secundario { background: #fff; color: var(--azul); }
+.error { color: var(--rojo); font-weight: 600; }
+.vacio { color: var(--gris); font-style: italic; }
+.huecos { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; }
+.huecos li { background: #d1e7dd; border-radius: 0.375rem; padding: 0.25rem 0.6rem; }
+.sugeridos { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; }
+.sugeridos li { background: #fff3cd; border: 1px solid #ffc107; border-radius: 0.375rem; padding: 0.25rem 0.6rem; }
+table.resultados { width: 100%; border-collapse: collapse; background: #fff; }
+table.resultados th, table.resultados td { border: 1px solid #dee2e6; padding: 0.4rem; text-align: left; }
+@media (min-width: 768px) {
+  .layout { flex-direction: row; }
+  .sidebar { width: 220px; flex-shrink: 0; }
+  .sidebar nav { flex-direction: column; }
+  main { flex: 1; }
+}

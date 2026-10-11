@@ -1,0 +1,3 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <span th:fragment="badge(estado)" th:class="'badge badge-' + ${#strings.toLowerCase(estado)}" th:text="${estado}">RESERVADO</span>
+</div>
