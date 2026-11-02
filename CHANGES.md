@@ -31,6 +31,7 @@ C-01 foundation-setup
               │        ├── C-08 turnos-reserva           ← barrera: necesita paciente + profesional
               │        │     ├── C-09 turnos-consulta-agenda
               │        │     └── C-10 turnos-cancelar-atendido-reprogramar
+              │        │           ├── C-13 turnos-por-sillon   ← post-MVP (requiere C-08 y C-10)
               │        │           └── C-11 frontend-shell-y-agenda
               │        │                 └── C-12 polish-seed-y-hardening
               │
@@ -346,6 +347,27 @@ Paso │ Agente A (Backend Core)                │ Agente B (Backend Dominio)  
   - `knowledge-base/09_decisiones_y_supuestos.md` §SU-01 a §SU-06 y §DD-03/DD-06
   - `knowledge-base/10_preguntas_abiertas.md` (validar que 3 Altas estén cerradas o documentadas como supuestos)
 
+## FASE 5 — Extensiones post-MVP
+
+> Changes agregados después del cierre del MVP (C-01 a C-12). Nacen de puntos que la propia knowledge-base dejó abiertos.
+
+### [C-13] `turnos-por-sillon`
+- **Estado**: `[ ]` pendiente
+- **Origen**: `knowledge-base/10_preguntas_abiertas.md` — pregunta Alta "¿Cuántas sedes/sillones hay y si v1 debe soportar más de una?" (valida SU-01). Hoy el turno se valida solo por profesional (RN-TU-01) y por paciente (RN-TU-05); el recurso físico (sillón/box) no existe en el modelo.
+- **Scope**: Asignar un sillón/box a cada turno nuevo y evitar que dos turnos `RESERVADO` se solapen en el mismo sillón, aunque sean de profesionales distintos. Una sola sede (se mantiene SU-01).
+  - Modelo: tabla `sillon` (`id`, `nombre`, `activo`) y columna `turno.sillon_id` FK → `sillon`, nullable para no romper los turnos existentes (regla del proyecto: migración forward-only, nunca `NOT NULL` sin default).
+  - Regla nueva a proponer en la KB: **RN-TU-11 — No superposición por sillón** (mismo criterio de solape que RN-TU-01, aplicado a `sillon_id`).
+  - Alcance del alta: `POST /api/turnos` recibe `sillon_id`; si el sillón está ocupado en ese horario → 409 con el mismo envelope de error existente.
+  - Fuera de alcance: ABM de sillones (en dev se cargan por seed), multi-sede, mover turnos viejos a un sillón.
+- **Dependencias**: C-08, C-10 (la cancelación libera el sillón)
+- **Governance**: ALTO (toca la barrera central del dominio)
+- **Leer antes**:
+  - `knowledge-base/05_reglas_de_negocio.md` §RN-TU-01, §RN-TU-05, §RN-TU-06
+  - `knowledge-base/04_modelo_de_datos.md` §Turno
+  - `knowledge-base/09_decisiones_y_supuestos.md` §SU-01
+  - `knowledge-base/10_preguntas_abiertas.md` (pregunta de sedes/sillones)
+  - `openspec/specs/turnos/spec.md` (spec vigente que se modifica)
+
 ---
 
 ## Resumen
@@ -357,7 +379,8 @@ Paso │ Agente A (Backend Core)                │ Agente B (Backend Dominio)  
 | FASE 2 — Catálogo y Pacientes | 3 | C-05, C-06, C-07 | C-05 ∥ C-06, C-07 tras C-06 |
 | FASE 3 — Agenda Núcleo | 3 | C-08, C-09, C-10 | C-09 ∥ C-10 tras C-08 |
 | FASE 4 — Presentación y Cierre | 2 | C-11, C-12 | No |
-| **Total** | **12** | **C-01 → C-12** | **3 gates con fork** |
+| FASE 5 — Extensiones post-MVP | 1 | C-13 | No |
+| **Total** | **13** | **C-01 → C-13** | **3 gates con fork** |
 
 **Gates de paralelismo**: 9 gates (GATE 0 a GATE 8), 2 forks reales (GATE 3 con 3 paralelos, GATE 6 con 2 paralelos)
 **Camino crítico**: 9 changes (C-01→C-02→C-03→C-06→C-07→C-08→C-09→C-11→C-12) — mínimo irreducible para producción
