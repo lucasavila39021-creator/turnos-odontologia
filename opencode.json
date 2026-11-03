@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "mysql": {
+      "type": "local",
+      "command": ["node", "C:\\Users\\Lucas\\AppData\\Roaming\\npm\\node_modules\\@benborla29\\mcp-server-mysql\\dist\\index.js"],
+      "environment": {
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "agente_mcp",
+        "MYSQL_PASS": "{env:MYSQL_PASS_AGENTE}",
+        "MYSQL_DB": "turnos_db",
+        "ALLOW_INSERT_OPERATION": "false",
+        "ALLOW_UPDATE_OPERATION": "false",
+        "ALLOW_DELETE_OPERATION": "false"
+      },
+      "enabled": true,
+      "timeout": 120000
+    }
+  }
+}
