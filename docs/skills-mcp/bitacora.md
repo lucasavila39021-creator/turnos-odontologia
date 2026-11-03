@@ -20,9 +20,9 @@
 ---
 
 ## Fase 0 — Preparar el terreno
-- [ ] 0.1 `git pull` y rama nueva `tp-skills-mcp`
-- [ ] 0.2 Agregar change nuevo a `CHANGES.md` (C-13) con dependencias y justificación desde la KB
-- [ ] 0.3 Crear `docs/skills-mcp/` con esta bitácora y carpeta `evidencias/`
+- [x] 0.1 `git pull` y rama nueva `tp-skills-mcp`
+- [x] 0.2 Agregar change nuevo a `CHANGES.md` (C-13) con dependencias y justificación desde la KB
+- [x] 0.3 Crear `docs/skills-mcp/` con esta bitácora y carpeta `evidencias/`
 
 ## Fase 1 — Ficha de investigación (en clase) → `docs/skills-mcp/investigacion.md` (máx 2 páginas)
 - [ ] 1.1 Necesidad detectada + change elegido (por qué ese)
