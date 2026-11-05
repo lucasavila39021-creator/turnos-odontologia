@@ -138,11 +138,89 @@ GitHub Actions `.github/workflows/ci.yml` — jobs paralelos `backend-test` (`mv
 mvn -B verify
 ```
 
+## Integración MCP: MySQL en solo lectura
+
+El agente de código (OpenCode) puede consultar el **esquema real** de la base de desarrollo a través de un servidor MCP. Se usa para explorar antes de proponer un change (por ejemplo, el C-13), no para modificar datos.
+
+| Dato | Valor |
+|---|---|
+| Servidor | [`@benborla29/mcp-server-mysql`](https://github.com/benborla/mcp-server-mysql) (MIT) |
+| Herramienta usada | `mysql_query` (y el recurso `mysql://tables`) |
+| Cliente | OpenCode **1.19.5** (V1). La configuración es de V1: no actualizar a 2.0 sin migrarla |
+| Configuración | `opencode.json` en la raíz del repo |
+
+### Requisitos
+
+- Node.js 20 o superior.
+- OpenCode 1.19.5: `npm install -g opencode-ai@1.19.5`.
+- MySQL con la base `turnos_db` cargada: con Docker (Quickstart) o, sin Docker, con `scripts/dev-db-nativo.sql`, que aplica las migraciones V2–V6 y carga datos ficticios.
+
+### Configuración
+
+1. Instalar el servidor de forma fija (con `npx` falló en Windows, ver más abajo):
+   ```bash
+   npm install -g @benborla29/mcp-server-mysql
+   ```
+2. Crear un usuario **exclusivo para el agente, solo lectura**, como root:
+   ```sql
+   CREATE USER 'agente_mcp'@'localhost' IDENTIFIED BY '<clave>';
+   GRANT SELECT, SHOW VIEW ON turnos_db.* TO 'agente_mcp'@'localhost';
+   ```
+3. Guardar esa clave **fuera del repo**, en una variable de entorno del sistema:
+   ```
+   setx MYSQL_PASS_AGENTE "<clave>"        (Windows, CMD)
+   export MYSQL_PASS_AGENTE='<clave>'      (Linux, en ~/.bashrc)
+   ```
+   Cerrar y volver a abrir las terminales (y VS Code) para que la tomen.
+4. Ajustar en `opencode.json` la ruta de `command` a la de la máquina. En Windows es `node` + la ruta de `dist\index.js` dentro de `%APPDATA%\npm\node_modules\@benborla29\mcp-server-mysql\`; en Linux alcanza con `["mcp-server-mysql"]`.
+
+### Variables
+
+| Variable | Valor en este proyecto | Dónde vive |
+|---|---|---|
+| `MYSQL_HOST` / `MYSQL_PORT` | `127.0.0.1` / `3306` | `opencode.json` |
+| `MYSQL_USER` | `agente_mcp` | `opencode.json` |
+| `MYSQL_DB` | `turnos_db` | `opencode.json` |
+| `MYSQL_PASS` | `{env:MYSQL_PASS_AGENTE}` | solo la variable del sistema; **nunca** en el repo |
+| `ALLOW_INSERT/UPDATE/DELETE_OPERATION` | `false` | `opencode.json` |
+
+### Límites de acceso (tres candados)
+
+1. **El servidor MCP** corre en solo lectura: los tres `ALLOW_*_OPERATION` están en `false`.
+2. **El usuario de MySQL** solo tiene `SELECT` y `SHOW VIEW`. Comprobado: un `DELETE` con `agente_mcp` devuelve *Error 1142, DELETE command denied*.
+3. **OpenCode pide permiso** antes de ejecutar comandos de consola o editar archivos (`"permission": {"bash": "ask", "edit": "ask"}`). Se agregó porque, sin MCP, el agente intentó resolver el pedido por su cuenta (ver `docs/skills-mcp/bitacora.md`, H14).
+
+Solo se usa contra la base de desarrollo, con datos ficticios.
+
+### Cómo probar
+
+1. Conexión del servidor:
+   ```bash
+   opencode mcp list
+   # → ✓ mysql connected
+   ```
+2. Uso real: abrir `opencode` en la raíz del repo, esperar a que `mysql` figure conectado en el panel lateral y pedir:
+   > Usá exclusivamente la herramienta del servidor MCP mysql para ejecutar SHOW CREATE TABLE turno sobre la base turnos_db. Si la herramienta no está disponible, decímelo y no respondas leyendo archivos del repositorio.
+
+   La respuesta debe incluir los índices que MySQL crea solo para las claves foráneas (`fk_turno_especialidad`, `fk_turno_created_by`), que **no están escritos** en `V6__turno.sql`. Es la señal de que leyó la base y no el archivo.
+3. En el log de OpenCode (`~/.local/share/opencode/log/opencode.log`) queda la línea `permission=mysql_mysql_query`.
+
+### Problemas encontrados y solución
+
+| Síntoma | Causa | Solución |
+|---|---|---|
+| Docker Desktop no instala | El equipo usa Windows 10 Enterprise LTSC 1809, que Docker no soporta | MySQL nativo + `scripts/dev-db-nativo.sql` |
+| `Operation timed out after 30000ms` | La primera descarga con `npx` superó el límite de OpenCode | `"timeout": 120000` e instalación fija |
+| `Connection closed` y avisos `EPERM` | `npx` dejó su caché a medio descargar | `npm install -g` en lugar de `npx` |
+| `opencode mcp list` se queda colgado | OpenCode no puede lanzar el atajo `.cmd` que npm crea en Windows | `"command": ["node", "<ruta>\\dist\\index.js"]` |
+| `mcp list` dice *connected*, pero el agente no puede usar la base (`failed to get resources`) | La clave de `MYSQL_PASS_AGENTE` y la de MySQL no coincidían: listar herramientas no entra a la base, consultar sí | Misma clave en `ALTER USER` y en `setx`. Prueba directa: `ER_ACCESS_DENIED_ERROR` → `CONEXION OK` |
+
 ## Docs
 
 - `knowledge-base/` — fuente de verdad del dominio
 - `CHANGES.md` — roadmap 12 changes (C-01 es GATE0, desbloquea C-02)
 - `openspec/` — specs OpenSpec
+- `docs/skills-mcp/` — TP Skills + MCP: bitácora, ficha de investigación y evidencias
 
 ## Fuera de alcance v1
 

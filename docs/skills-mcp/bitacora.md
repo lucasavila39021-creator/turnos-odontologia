@@ -22,8 +22,8 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Último commit: `549ed08` chore: permisos ask para bash y edit; bitacora con causa raiz del MCP (5/11)
-- Próximo paso concreto: restaurar la bitácora con el comando fijo (ver "Cómo actualizar este archivo") y commitear; después 3.4 (sección MCP del README, la redacta Claude)
+- Último commit: `b9866d5` docs: restaurar bitacora y fijar procedimiento de actualizacion (5/11; verificado en GitHub, idéntica)
+- Próximo paso concreto: Lucas revisa la sección MCP del README (borrador de Claude) y se commitea; después 3.5 (AGENTS.md / CLAUDE.md)
 - Bloqueos / dudas para el profe: fecha de clase y de entrega (desconocidas → modo simulacro)
 
 ## Entornos
@@ -73,7 +73,7 @@ git status
 - [x] 3.2 Ejecutar 1 herramienta real (`SHOW CREATE TABLE turno`) — 5/11, Big Pickle, 10,6 s; ver H17. Evidencia: captura de la respuesta + `evidencias/log-mcp-uso.txt` (línea 566 del log: `permission=mysql_mysql_query`)
 - [x] 3.3 `opencode.json` de ejemplo sin secretos
 - [x] 3.3b Tercer candado: permisos `bash` y `edit` en `ask` dentro de `opencode.json` (por H14) — commit `549ed08` (5/11)
-- [ ] 3.4 Sección MCP en README (requisitos, pasos, variables, cómo probar, problema y solución)
+- [ ] 3.4 Sección MCP en README (requisitos, pasos, variables, cómo probar, problema y solución) — borrador de Claude entregado 5/11, falta revisión de Lucas y commit
 - [ ] 3.5 AGENTS.md / CLAUDE.md: propósito del MCP, tools, cuándo, límites
 
 ## Fase 4 — Preparar el change C-13 (SDD)
@@ -99,6 +99,7 @@ git status
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-05 | Bitácora restaurada y verificada en GitHub; borrador de la sección MCP del README | `b9866d5` | Revisar README y commitear |
 | 2026-11-05 | La bitácora se volvió a borrar en `1481cb0` (H16 bis); se fija un comando único para actualizarla | `1481cb0` (log) | Restaurar bitácora; README del MCP |
 | 2026-11-05 | Prueba real del MCP: `SHOW CREATE TABLE turno` respondido desde la base (H17); invocación confirmada en el log; sin pedidos de permiso | `1481cb0` | README del MCP (3.4) |
 | 2026-11-05 | Retomamos; paso 18: `ALTER USER` + `setx` con la misma clave → `CONEXION OK [ { n: 4 } ]`. Se detectó que la bitácora descargada quedó como `bitacora (8).md` sin reemplazar la del repo (las versiones con H9b–H15 nunca se habían subido) | `549ed08` | Prueba real del MCP (3.2) |
