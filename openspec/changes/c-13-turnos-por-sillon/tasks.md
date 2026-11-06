@@ -37,14 +37,22 @@
 | Alta SSR sin sillón devuelve 400 | `TurnoMvcControllerTest` | MockMvc + H2 |
 | Sillón inexistente devuelve 404 | `TurnoControllerH2Test` | MockMvc + H2 |
 | Sillón inactivo devuelve 400 | `TurnoControllerH2Test` | MockMvc + H2 |
+| Turno legacy sin sillón sigue siendo legible | `TurnoConsultaH2Test` + `TurnoControllerH2Test` | MockMvc + H2 |
+| Alta cerca de medianoche no corre la fecha | `TurnoHorarioBordeTest` | Servicio H2 (TZ) |
 | Mismo sillón y horario con profesionales distintos devuelve 409 | `TurnoServiceSillonTest` + `TurnoSillonIT` | Servicio H2 + Testcontainers MySQL |
 | Mismo horario en sillones distintos se crea | `TurnoServiceSillonTest` + `TurnoSillonIT` | Servicio H2 + Testcontainers MySQL |
 | Turno contiguo en el mismo sillón se crea | `TurnoServiceSillonTest` | Servicio H2 |
 | Turno CANCELADO libera el sillón | `TurnoServiceSillonTest` | Servicio H2 |
+| Turno ATENDIDO no bloquea el sillón | `TurnoServiceSillonTest` | Servicio H2 |
 | Turnos legacy sin sillón no participan | `TurnoServiceSillonTest` + `TurnoSillonIT` | Servicio H2 + Testcontainers MySQL |
+| Mismo horario en otro día no solapa | `TurnoServiceSillonTest` + `TurnoSillonIT` | Servicio H2 + Testcontainers MySQL |
 | Sugeridos filtran por profesional y sillón | `TurnoServiceSillonTest` | Servicio H2 |
-| Reprogramar conserva el sillón | `TurnoControllerH2Test` | MockMvc + H2 |
+| Dos altas simultáneas al mismo sillón: una se crea y la otra devuelve 409 | `TurnoSillonConcurrenciaTest` | Servicio H2 |
+| Reprogramar conserva el sillón | `TurnoControllerH2Test` + `TurnoServiceSillonTest` | MockMvc + H2 |
 | Reprogramar legacy exige sillón | `TurnoControllerH2Test` | MockMvc + H2 |
+| Reprogramar con sillón distinto devuelve 400 | `TurnoControllerH2Test` + `TurnoServiceSillonTest` | MockMvc + H2 |
+| Reprogramar con sillón inexistente devuelve 404 | `TurnoControllerH2Test` | MockMvc + H2 |
+| Reprogramar con sillón inactivo devuelve 400 | `TurnoControllerH2Test` | MockMvc + H2 |
 | Reprogramar a sillón ocupado devuelve 409 con original intacto | `TurnoServiceSillonTest` + `TurnoControllerH2Test` | Servicio H2 + MockMvc |
 
 ## Workflow follow-up
