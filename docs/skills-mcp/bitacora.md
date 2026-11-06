@@ -22,15 +22,41 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Último commit: `b9866d5` docs: restaurar bitacora y fijar procedimiento de actualizacion (5/11; verificado en GitHub, idéntica)
-- Próximo paso concreto: Lucas revisa la sección MCP del README (borrador de Claude) y se commitea; después 3.5 (AGENTS.md / CLAUDE.md)
-- Bloqueos / dudas para el profe: fecha de clase y de entrega (desconocidas → modo simulacro)
+- Último commit: `9506519` docs: seccion de integracion MCP en el README (5/11; verificado en GitHub)
+- Avance: 20 de 45 casillas. Hecho: entorno, base, MCP completo salvo 3.5. Falta: 3.5, ficha, skill propia, C-13 y entrega
+- Próximo paso concreto: sesión A — commit único con 3.5 + ficha (archivos listos de Claude, 6/11); después la skill propia (2.1–2.7)
+- **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
+- Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
 ## Entornos
 | Máquina | Sistema | OpenCode | Node | Base de datos | Proveedor de modelo |
 |---|---|---|---|---|---|
 | Notebook Lenovo | Linux Mint | 1.19.5 (V1) | instalado | Docker (MySQL 8.0) | OpenCode Zen |
 | Escritorio | Windows 10 Enterprise LTSC 1809 | 1.19.5 (V1) — NO actualizar a 2.0 | v26.13.0 / npm 11.20.0 | MySQL Server 26.10.0 nativo + Workbench 8.0 | OpenCode, modelo gratuito Big Pickle (sin API key) |
+
+## Plan hasta el domingo 8/11 (acelerado)
+Regla para ir rápido: Claude llega con los archivos **listos para copiar**, y cada bloque se cierra con **un solo commit** (no uno por casilla).
+
+| Sesión | Bloque | Casillas | Lo prepara Claude antes | Lo hace Lucas |
+|---|---|---|---|---|
+| A | Cerrar MCP + ficha | 3.5 · 1.8 · 1.9 | Bloques para `AGENTS.md` y `CLAUDE.md`; ficha actualizada | Copiar, revisar, 1 commit |
+| A | Skill propia | 2.1–2.7 | Comando de instalación de `skill-creator` + plan B; prompt para generar el revisor; texto para registry/AGENTS/CLAUDE | Instalar, generar con el agente, probar en sesión nueva, capturas |
+| B | Change C-13 | E.10 · 4.1–4.7 | Comando de `openspec` (**sin** `openspec init`: el repo ya está inicializado); prompts para `/opsx-explore` y `/opsx-propose` | Ejecutar con el agente, pasar la skill al spec, capturas |
+| C (domingo) | Entrega del repo | 5.0 · 5.1 · 5.2 · 5.4 · 5.5 · 5.6 | `aplicacion.md` armado desde la bitácora (H12/H14/H17 = revisión crítica); `ENTREGA.md`; ficha final | Mover capturas, clonar en limpio y seguir el README, commit final y hash |
+| Después del 8/11 | Video | 5.3 | **Cuadro de guion** (tiempo · qué decir · qué se ve · dónde señalar en pantalla · escena de OBS) | Ensayar y grabar con OBS antes del 20/11 |
+
+Datos ya verificados para el plan:
+- `openspec`: `npm install -g @fission-ai/openspec@latest` (Node 20.19+). No correr `openspec init`.
+- `skill-creator`: candidato `npx skills add anthropics/skills@skill-creator` (inferido, no confirmado para OpenCode). Riesgo: `npx` falló en este escritorio (H9) → plan B: traer la carpeta `skills/skill-creator` del repo `anthropics/skills` con git y copiarla a `.opencode/skills/`.
+
+Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
+| Tramo | Contenido | Pantalla |
+|---|---|---|
+| 0:00–0:30 | Problema: los turnos no conocen el sillón (C-13) | `CHANGES.md` / knowledge-base |
+| 0:30–1:45 | MCP en uso: los tres candados y la consulta real | `opencode.json`, OpenCode con `mysql` conectado, Workbench con el DELETE denegado |
+| 1:45–3:00 | Skill en uso: el revisor encuentra escenarios faltantes | OpenCode + spec del C-13 |
+| 3:00–4:00 | Integración a la fundación y aporte al change | `AGENTS.md`, `skill-registry`, `openspec/changes/...` |
+| 4:00–5:00 | Revisión crítica: el agente que respondió sin MCP (H12/H14) y cómo se detectó | log `log-mcp-uso.txt` + bitácora |
 
 ---
 
@@ -73,7 +99,7 @@ git status
 - [x] 3.2 Ejecutar 1 herramienta real (`SHOW CREATE TABLE turno`) — 5/11, Big Pickle, 10,6 s; ver H17. Evidencia: captura de la respuesta + `evidencias/log-mcp-uso.txt` (línea 566 del log: `permission=mysql_mysql_query`)
 - [x] 3.3 `opencode.json` de ejemplo sin secretos
 - [x] 3.3b Tercer candado: permisos `bash` y `edit` en `ask` dentro de `opencode.json` (por H14) — commit `549ed08` (5/11)
-- [ ] 3.4 Sección MCP en README (requisitos, pasos, variables, cómo probar, problema y solución) — borrador de Claude entregado 5/11, falta revisión de Lucas y commit
+- [x] 3.4 Sección MCP en README (requisitos, pasos, variables, cómo probar, problema y solución) — redactada por Claude, aprobada por Lucas, commit `9506519` (5/11)
 - [ ] 3.5 AGENTS.md / CLAUDE.md: propósito del MCP, tools, cuándo, límites
 
 ## Fase 4 — Preparar el change C-13 (SDD)
@@ -99,7 +125,9 @@ git status
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
-| 2026-11-05 | Bitácora restaurada y verificada en GitHub; borrador de la sección MCP del README | `b9866d5` | Revisar README y commitear |
+| 2026-11-06 | Sesión A: Claude entrega `AGENTS.md`/`CLAUDE.md` con la sección MCP (idénticos) y la ficha actualizada al entorno real | pendiente | Skill propia |
+| 2026-11-05 (cierre) | Fechas de entrega recibidas; plan acelerado A/B/C + video | sin commit (esta versión se sube al empezar la sesión A) | Sesión A |
+| 2026-11-05 | Bitácora restaurada; sección MCP del README aprobada y subida | `b9866d5` · `9506519` | 3.5 |
 | 2026-11-05 | La bitácora se volvió a borrar en `1481cb0` (H16 bis); se fija un comando único para actualizarla | `1481cb0` (log) | Restaurar bitácora; README del MCP |
 | 2026-11-05 | Prueba real del MCP: `SHOW CREATE TABLE turno` respondido desde la base (H17); invocación confirmada en el log; sin pedidos de permiso | `1481cb0` | README del MCP (3.4) |
 | 2026-11-05 | Retomamos; paso 18: `ALTER USER` + `setx` con la misma clave → `CONEXION OK [ { n: 4 } ]`. Se detectó que la bitácora descargada quedó como `bitacora (8).md` sin reemplazar la del repo (las versiones con H9b–H15 nunca se habían subido) | `549ed08` | Prueba real del MCP (3.2) |

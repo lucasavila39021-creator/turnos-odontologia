@@ -88,6 +88,24 @@ Dependencias clave: `C-01 → C-02 → C-03` desbloquea todo; `C-05 + C-07 → C
 
 ---
 
+## Integración MCP: MySQL en solo lectura
+
+Servidor MCP `mysql` (`@benborla29/mcp-server-mysql`), declarado en `opencode.json`. Da acceso de **solo lectura** a la base de desarrollo `turnos_db`. Instalación, variables y pruebas: ver la sección MCP del [README](README.md).
+
+- **Para qué:** consultar el esquema **real** (tablas, columnas, índices, restricciones) y datos de ejemplo antes de proponer o diseñar un change. Ejemplo: `SHOW CREATE TABLE turno` antes de diseñar el C-13.
+- **Herramienta:** `mysql_query` (y el recurso `mysql://tables`).
+- **Cuándo usarlo:** en `explore` y `propose` de cualquier change que toque el modelo de datos; para verificar que una migración o un spec coincide con la base.
+- **Cuándo no:** para modificar datos o esquema (las migraciones van por Flyway), ni contra una base que no sea la de desarrollo.
+
+Reglas:
+
+- **NUNCA** responder "según la base" si la herramienta `mysql_query` no está disponible → decirlo explícitamente y frenar. No reemplazarla leyendo las migraciones ni con scripts propios (antecedente: bitácora del TP, H12 y H14).
+- **NUNCA** buscar, leer ni pedir la contraseña del usuario `agente_mcp` → vive solo en la variable de entorno `MYSQL_PASS_AGENTE`, fuera del repo.
+- **NUNCA** intentar escribir (`INSERT`, `UPDATE`, `DELETE`, DDL) → el acceso es de solo lectura en tres niveles (servidor MCP, usuario MySQL y permisos de OpenCode).
+- Al citar un dato de la base, indicar que salió de `mysql_query`. Si difiere de los archivos del repo (por ejemplo, índices que MySQL crea solo para las claves foráneas), manda la base y se anota la diferencia.
+
+---
+
 ## Reglas Duras (específicas del proyecto)
 
 > `~/.claude/CLAUDE.md` global no encontrado en este entorno — ninguna regla universal heredada. Las reglas universales que normalmente vivirían en el global se incluyen acá como proyecto hasta que se agreguen al global. Si en el futuro el global aparece, referenciarlo y no duplicar.
