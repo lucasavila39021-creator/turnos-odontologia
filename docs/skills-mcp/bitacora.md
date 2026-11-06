@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 30 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: C-13 y entrega
-- Último commit: `65c2286` fix: restaurar SKILL.md… (6/11; verificado en GitHub)
-- Próximo paso concreto: commit de cierre de la fase 2; E.10 (instalar `openspec` 1.14.1); después 4.1 explore del C-13
+- Avance: 31 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: C-13 y entrega
+- Último commit: `a466d3a` docs: bitacora con la fase de skill completa (6/11)
+- Próximo paso concreto: 4.1 — `/opsx-explore` del C-13 con el prompt versionado `docs/skills-mcp/evidencias/prompt-c13-explore.md` (usa el MCP)
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
@@ -77,7 +77,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] E.8 `opencode mcp list` muestra `mysql` conectado (comprobado también en un CMD nuevo, sin variables manuales)
 - [x] E.8b Contraseña del agente sincronizada entre MySQL y Windows (5/11) — evidencia: `CONEXION OK [ { n: 4 } ]` con `mysql2` y `MYSQL_PASS_AGENTE`
 - [x] E.9 Modelo configurado en el escritorio: Big Pickle (gratuito, sin API key)
-- [ ] E.10 Instalar el CLI `openspec` **1.14.1** (la versión que generó las skills OPSX del repo: `generatedBy: "1.14.1"`); nunca `openspec init`
+- [x] E.10 Instalar el CLI `openspec` **1.14.1** (la versión que generó las skills OPSX del repo: `generatedBy: "1.14.1"`); nunca `openspec init` — 6/11, `openspec --version` = 1.14.1
 - Nota: OpenCode se usa desde la terminal de VS Code; la consola vieja de Windows no dibuja los íconos (`?`) ni pega con Ctrl+V
 
 ## Fase 1 — Ficha de investigación → `docs/skills-mcp/investigacion.md` (máx 2 páginas)
@@ -103,7 +103,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 3.5 AGENTS.md / CLAUDE.md: propósito del MCP, tools, cuándo, límites — sección idéntica en ambos, commit `06247de` (6/11)
 
 ## Fase 4 — Preparar el change C-13 (SDD)
-- [ ] 4.1 Explore (usando el MCP) → guardar resumen
+- [ ] 4.1 Explore (usando el MCP) → guardar resumen — prompt en `docs/skills-mcp/evidencias/prompt-c13-explore.md`; resumen irá a `docs/skills-mcp/evidencias/c13-explore.md`
 - [ ] 4.2 Propose: proposal.md, design.md, specs/, tasks.md
 - [ ] 4.3 Spec con ≥3 escenarios dado/cuando/entonces: feliz, error de negocio, borde
 - [ ] 4.4 Pasar la skill propia sobre el spec → corregir con Ajustar
@@ -125,7 +125,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
-| 2026-11-06 | 2.7: sesión nueva encuentra la skill sola → fase 2 cerrada | pendiente | `openspec` + C-13 |
+| 2026-11-06 | 2.7: sesión nueva encuentra la skill sola → fase 2 cerrada; `openspec` 1.14.1 instalado | `a466d3a` | Explore del C-13 |
 | 2026-11-06 | Commit de ajustes (registro y AGENTS/CLAUDE correctos; `SKILL.md` pisado, H20) y corrección | `b677119` · `65c2286` | 2.7 |
 | 2026-11-06 | `skill-creator` instalada (git, global); skill generada por el agente con el prompt versionado; Claude revisa y propone 5 ajustes; registro y AGENTS/CLAUDE preparados | `7b3928b` | Commit de ajustes; 2.7 |
 | 2026-11-06 | Sesión A: sección MCP en `AGENTS.md`/`CLAUDE.md` (idénticos) y ficha actualizada. El pegado de varias líneas en PowerShell dejó copias a medias; se rehízo en una sola línea | `06247de` | Skill propia |
