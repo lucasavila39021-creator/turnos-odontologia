@@ -63,13 +63,23 @@ Fuente de verdad: `.atl/skill-registry.md` (generado por `skill-registry` — no
 | **Backend Sec** | Auth/RBAC/validación/hardening | `springboot-security` |
 | **Frontend** | UI agenda/turnos | `frontend-design` |
 | **Testing** | Integración/E2E | `webapp-testing` |
+| **Revisión de specs** | Auditar escenarios de changes de turnos | `revisor-escenarios-turnos` (propia del proyecto) |
 | **Orquestación** | SDD / OPSX / docs | `kb-creator`, `roadmap-generator`, `agents-md-generator`, `skill-registry`, `find-skills` (foundation) |
 
 Cargá la skill correspondiente al contexto ANTES de escribir código.
 
 > Los compact rules de cada skill los resuelve el orquestador desde `.atl/skill-registry.md` (generado por `skill-registry`; no versionado — no está en el repo). Esta tabla solo mapea skill→rol.
 
-Ver registry: [.atl/skill-registry.md](.atl/skill-registry.md) — 6 skills con triggers y compact rules pre-digeridos.
+Ver registry: [.atl/skill-registry.md](.atl/skill-registry.md) — 7 skills (6 de usuario + 1 propia del proyecto) con triggers y compact rules pre-digeridos.
+
+### Skill propia: `revisor-escenarios-turnos`
+
+Ubicación: [.opencode/skills/revisor-escenarios-turnos/SKILL.md](.opencode/skills/revisor-escenarios-turnos/SKILL.md) (versionada en el repo).
+
+- **Cuándo usarla:** después de `propose` de cualquier change que toque turnos, agenda, profesionales o sillón/box, y **antes** de aprobar el spec. También cuando se pida revisar o auditar escenarios.
+- **Qué necesita:** el `spec.md` del change, `knowledge-base/05_reglas_de_negocio.md`, la sección "Leer antes" de `CHANGES.md` y el `proposal.md` / `design.md` del change. Si el spec afirma algo del esquema, la verificación va con el MCP `mysql`.
+- **Qué entrega:** tabla regla → escenario, escenarios faltantes en dado / cuando / entonces con su origen, y veredicto **OK** o **AJUSTAR**.
+- **Cómo revisar su resultado:** cada hallazgo debe citar una regla `RN-xx-nn` o un ítem del checklist; lo que no esté en la knowledge-base tiene que venir marcado como "decisión de dominio a justificar". La skill no edita nada: si el veredicto es AJUSTAR, los cambios al spec los aplica la persona y se vuelve a correr la skill.
 
 ---
 
@@ -131,6 +141,7 @@ Son contrato; romperlas es un defecto. Formato `NUNCA X → hacer Y`:
 1. Leer la KB relevante (knowledge-base/)        → entender el dominio
 2. Identificar el change en CHANGES.md           → respetar dependencias y gates
 3. /opsx:propose C-NN-nombre                     → proposal + design + specs + tasks
+3b. skill revisor-escenarios-turnos               → si toca turnos: veredicto OK antes de seguir
 4. Implementar las tasks (cargando skills)       → respetando las reglas duras
 5. /opsx:archive C-NN-nombre + marcar [x]        → cerrar el change y actualizar CHANGES.md
 ```

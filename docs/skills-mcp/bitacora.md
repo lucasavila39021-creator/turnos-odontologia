@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Último commit: `9506519` docs: seccion de integracion MCP en el README (5/11; verificado en GitHub)
-- Avance: 20 de 45 casillas. Hecho: entorno, base, MCP completo salvo 3.5. Falta: 3.5, ficha, skill propia, C-13 y entrega
-- Próximo paso concreto: sesión A — commit único con 3.5 + ficha (archivos listos de Claude, 6/11); después la skill propia (2.1–2.7)
+- Avance: 26 de 45 casillas. Hecho: entorno, base, MCP completo y ficha. Falta: skill propia, C-13 y entrega
+- Último commit: `7b3928b` feat: skill revisor-escenarios-turnos generada con skill-creator (version original)
+- Próximo paso concreto: commit de ajustes (2.3) + registro (2.5) + AGENTS/CLAUDE (2.6); después 2.7, sesión nueva del agente
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
@@ -82,16 +82,16 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 
 ## Fase 1 — Ficha de investigación → `docs/skills-mcp/investigacion.md` (máx 2 páginas)
 - [x] 1.1–1.7 Borrador hecho
-- [ ] 1.8 Actualizar el borrador: versión V1 confirmada, MySQL nativo en lugar de Docker, `{env:}` verificado
-- [ ] 1.9 Subir la ficha al repo
+- [x] 1.8 Actualizar el borrador: versión V1 confirmada, MySQL nativo en lugar de Docker, `{env:}` verificado — commit `06247de` (6/11)
+- [x] 1.9 Subir la ficha al repo — `docs/skills-mcp/investigacion.md`, commit `06247de` (6/11)
 
 ## Fase 2 — Skill propia
-- [ ] 2.1 Instalar la skill creadora y comprobar que el agente la ve
-- [ ] 2.2 Generar la skill propia con ella (guardar el prompt usado)
-- [ ] 2.3 Revisar y adaptar lo generado al dominio (anotar qué se cambió)
-- [ ] 2.4 Guardarla en `.opencode/skills/revisor-escenarios-turnos/SKILL.md`
-- [ ] 2.5 Registrar en `.atl/skill-registry.md`
-- [ ] 2.6 Actualizar `AGENTS.md` y `CLAUDE.md` con el mismo texto
+- [x] 2.1 Instalar la skill creadora y comprobar que el agente la ve — 6/11, global en `~/.config/opencode/skills/skill-creator` (git sparse, sin npx); el agente la lista (captura)
+- [x] 2.2 Generar la skill propia con ella (guardar el prompt usado) — prompt en `docs/skills-mcp/evidencias/prompt-skill-creator.md`; versión original del agente en commit `7b3928b` (6/11, Big Pickle, 2 min 50 s, solo creó el `SKILL.md`)
+- [ ] 2.3 Revisar y adaptar lo generado al dominio (anotar qué se cambió) — 5 ajustes propuestos por Claude (H19); evidencia = `git diff 7b3928b` del commit de ajustes
+- [x] 2.4 Guardarla en `.opencode/skills/revisor-escenarios-turnos/SKILL.md` — commit `7b3928b`
+- [ ] 2.5 Registrar en `.atl/skill-registry.md` — preparado (sección "Project Skills" + compact rules)
+- [ ] 2.6 Actualizar `AGENTS.md` y `CLAUDE.md` con el mismo texto — preparado (fila en la tabla, sección de la skill, paso 3b del flujo)
 - [ ] 2.7 Sesión nueva del agente: comprobar que la encuentra sin ayuda
 
 ## Fase 3 — MCP
@@ -100,7 +100,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 3.3 `opencode.json` de ejemplo sin secretos
 - [x] 3.3b Tercer candado: permisos `bash` y `edit` en `ask` dentro de `opencode.json` (por H14) — commit `549ed08` (5/11)
 - [x] 3.4 Sección MCP en README (requisitos, pasos, variables, cómo probar, problema y solución) — redactada por Claude, aprobada por Lucas, commit `9506519` (5/11)
-- [ ] 3.5 AGENTS.md / CLAUDE.md: propósito del MCP, tools, cuándo, límites
+- [x] 3.5 AGENTS.md / CLAUDE.md: propósito del MCP, tools, cuándo, límites — sección idéntica en ambos, commit `06247de` (6/11)
 
 ## Fase 4 — Preparar el change C-13 (SDD)
 - [ ] 4.1 Explore (usando el MCP) → guardar resumen
@@ -125,7 +125,8 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
-| 2026-11-06 | Sesión A: Claude entrega `AGENTS.md`/`CLAUDE.md` con la sección MCP (idénticos) y la ficha actualizada al entorno real | pendiente | Skill propia |
+| 2026-11-06 | `skill-creator` instalada (git, global); skill generada por el agente con el prompt versionado; Claude revisa y propone 5 ajustes; registro y AGENTS/CLAUDE preparados | `7b3928b` | Commit de ajustes; 2.7 |
+| 2026-11-06 | Sesión A: sección MCP en `AGENTS.md`/`CLAUDE.md` (idénticos) y ficha actualizada. El pegado de varias líneas en PowerShell dejó copias a medias; se rehízo en una sola línea | `06247de` | Skill propia |
 | 2026-11-05 (cierre) | Fechas de entrega recibidas; plan acelerado A/B/C + video | sin commit (esta versión se sube al empezar la sesión A) | Sesión A |
 | 2026-11-05 | Bitácora restaurada; sección MCP del README aprobada y subida | `b9866d5` · `9506519` | 3.5 |
 | 2026-11-05 | La bitácora se volvió a borrar en `1481cb0` (H16 bis); se fija un comando único para actualizarla | `1481cb0` (log) | Restaurar bitácora; README del MCP |
@@ -160,3 +161,10 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - **H15 — Causa raíz: contraseña desincronizada (3/11).** El log mostró `failed to get resources ... Connection closed`: el servidor MCP arrancaba y listaba sus herramientas, pero se caía al tocar la base. Se probó la conexión con la misma librería que usa el servidor (`mysql2`), el usuario `agente_mcp` y la variable `MYSQL_PASS_AGENTE`: `ER_ACCESS_DENIED_ERROR ... (using password: YES)`. La variable de Windows (`setx`) y la contraseña de MySQL (`ALTER USER`, paso 5e) no coinciden. **Corrige la hipótesis de H12** ("VS Code no tenía la variable"): la variable estaba (`variable OK`), pero con una clave vieja. Explica también por qué `opencode mcp list` decía "conectado" mientras la sesión no podía usar la base: listar herramientas no requiere entrar a MySQL. El fallo puntual de H9 (5) probablemente tenga la misma causa, pero no se comprobó. Solución: misma contraseña nueva en los dos lugares (paso 18). **Resuelto 5/11:** la prueba directa devolvió `CONEXION OK [ { n: 4 } ]`.
 - **H16 — La bitácora se borró del repo sin querer (5/11, revisando el historial).** El commit `04f504c` (integración MCP) incluyó el borrado de `docs/skills-mcp/bitacora.md`, y las versiones descargadas después quedaron con otro nombre (`bitacora (8).md`). Se restauró completa en `549ed08` y se verificó contra la copia de trabajo: idéntica. Lección: después de reemplazar un archivo, mirar `git status` antes del commit (una `U` o un `D` inesperado avisa). **Se repitió en `1481cb0`** (el commit del log borró la bitácora: 121 líneas eliminadas) y el `git status` previo no llegó a verse completo. Causa: el reemplazo a mano desde el Explorador (renombrar + reemplazar) es frágil y el error del método fue de Claude, que lo indicó así. Corrección: comando único de PowerShell que copia la última bitácora descargada encima de la del repo (sección "Cómo actualizar este archivo").
 - **H17 — Prueba real del MCP: la base muestra lo que el archivo no dice (5/11).** Con la contraseña sincronizada, el agente (Big Pickle) respondió en 10,6 s con columnas, índices y restricciones de `turno`, y confirmó que no hay columna de sillón/box. Diferencia con H12: ahora lista `PRIMARY (id)` y dos índices **que no están escritos en `V6__turno.sql`**: `fk_turno_especialidad (especialidad_id)` y `fk_turno_created_by (created_by)`. MySQL los crea solo para las claves foráneas que no tienen un índice que empiece por esa columna; `paciente_id` y `profesional_id` no los necesitan porque ya encabezan `idx_turno_pac_fecha` e `idx_turno_prof_fecha`. Es la huella de que la respuesta salió de la base real y no del archivo, y un dato útil para el diseño del C-13: el futuro `sillon_id` necesitará su propio índice compuesto (`sillon_id, fecha, hora_inicio`) para validar solapes, como ya pasa con profesional. **Prueba en el log** (`opencode.log`, línea 566, 2026-11-05 14:56:52 hora local, sesión `a76614d8`): `evaluated permission=mysql_mysql_query` = servidor `mysql` + herramienta `mysql_query`. En esa sesión no hay ninguna línea de `bash` ni de `edit`, y el agente no pidió permisos: usó solo el MCP. Contraste con la sesión del 3/11 (`4bf74bb7`, H14): ahí aparece `permission=bash` ejecutando un `mcp-client.js` propio con `call mysql_query`, o sea, el agente imitando al MCP por fuera.
+- **H18 — Instalación de la skill creadora sin npx (6/11).** Por H9 (npx falló en este equipo) no se usa `npx skills add`. Se trae solo la carpeta `skills/skill-creator` del repositorio oficial `anthropics/skills` con `git clone --sparse` y se copia a la carpeta global de skills de OpenCode (`~/.config/opencode/skills/`), para no mezclar una herramienta en el repo del proyecto. Del `skill-creator` se usa el flujo de creación (entrevista → borrador de `SKILL.md`); su ciclo de evaluación automática (`scripts/run_eval.py`, visor de evals) está pensado para Claude Code y Python, y no se usa.
+- **H19 — Revisión crítica de la skill generada (6/11).** La versión del agente (`7b3928b`) era sólida (formato, checklist de 10 bordes, citas obligatorias, solo lectura), pero tenía 5 problemas, cada uno contrastado con una fuente:
+  1. Obligaba a revisar `RN-TU-01` a `RN-TU-10`, pero el README pone **RN-TU-10 fuera de alcance de v1** → habría marcado "SIN CUBRIR" en falso. Ajuste: RN-TU-10 = "No aplica" salvo que el change la active.
+  2. En el borde 3 daba por hecho que un turno que **termina** después del cierre debe rechazarse, pero **RN-TU-03 solo habla de `hora_inicio`** → el agente casi inventa una regla. Ajuste: marcarlo como "decisión de dominio a justificar".
+  3. "Un ATENDIDO no debería bloquear" sin cita → se reescribió citando RN-TU-01 (solo `RESERVADO` cuenta).
+  4. **No contemplaba reglas nuevas que propone el propio change** (el C-13 propone RN-TU-11, por sillón): las habría tratado como inventadas. Ajuste: leer `proposal.md`/`design.md` y tratarlas como "regla propuesta por el change", exigiendo escenarios y actualización de la KB.
+  5. Aunque su descripción menciona sillón/box, **el checklist no tenía ningún borde de sillón**. Ajuste: ítem 11 (mismo sillón con profesionales distintos, sillones distintos, contiguo, cancelado libera, turnos viejos sin sillón).

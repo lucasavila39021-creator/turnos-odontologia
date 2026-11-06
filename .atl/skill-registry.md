@@ -15,6 +15,14 @@ See `_shared/skill-resolver.md` for the full resolution protocol.
 | Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one | frontend-design | /home/dev/.agents/skills/frontend-design/SKILL.md |
 | Toolkit for interacting with and testing local web applications using Playwright | webapp-testing | /home/dev/.agents/skills/webapp-testing/SKILL.md |
 
+## Project Skills
+
+Skills propias del proyecto, versionadas en el repo (las recibe cualquiera que clone).
+
+| Trigger | Skill | Path |
+|---------|-------|------|
+| Use after an OpenSpec `propose` of a change that touches turnos, agenda, profesionales or sillón/box, before approving the spec; or when asked to review/audit spec scenarios against RN-TU rules | revisor-escenarios-turnos | .opencode/skills/revisor-escenarios-turnos/SKILL.md |
+
 ## Compact Rules
 
 Pre-digested rules per skill. Delegators copy matching blocks into sub-agent prompts as `## Project Standards (auto-resolved)`.
@@ -70,6 +78,16 @@ Pre-digested rules per skill. Delegators copy matching blocks into sub-agent pro
 - Descriptive selectors: `text=`, `role=`, CSS/ID; explicit waits `wait_for_selector`/`wait_for_timeout`; never inspect before `networkidle` on dynamic apps
 - Bundle scripts/examples in `scripts/` and `examples/` (`element_discovery.py`, `console_logging.py`) — reuse before writing custom logic
 - Headless Chromium only; close browser; handle single and multi-server (backend+frontend) via `with_server.py`
+
+### revisor-escenarios-turnos
+- Read-only audit: never edit spec/design/tasks/KB; report only, the person applies changes
+- Inputs: change spec(s) `openspec/changes/<change>/specs/**/spec.md`, `knowledge-base/05_reglas_de_negocio.md`, `CHANGES.md` "Leer antes", change `proposal.md`/`design.md` (rules proposed by the change, e.g. RN-TU-11)
+- Classify every scenario (feliz / error de negocio / borde) and check dado/cuando/entonces with an observable result (HTTP code, turno state, fieldError)
+- Cross each touched rule (RN-TU-01..09, RN-PR-05, RN-GL-02; RN-TU-10 = out of scope v1) to ≥1 scenario or mark SIN CUBRIR
+- Walk the 11-item edge checklist (contiguous, CANCELADO frees slot, opening hours, past date, same patient, timezone, concurrency, fixed duration, states, reschedule, sillón/box)
+- Every finding cites RN-xx-nn or a checklist item; anything not in the KB = "decisión de dominio a justificar"
+- Schema claims verified only with MCP `mysql_query`; if unavailable, say so and stop that check
+- Output: rule→scenario table, missing scenarios (dado/cuando/entonces + origin), verdict OK | AJUSTAR
 
 ## Project Conventions
 
