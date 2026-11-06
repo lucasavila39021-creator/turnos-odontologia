@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 28 de 45 casillas. Hecho: entorno, base, MCP completo y ficha. Falta: skill propia, C-13 y entrega
-- Último commit: `b677119` feat: adaptar skill… (registro, AGENTS y CLAUDE bien; `SKILL.md` pisado por error, ver H20)
-- Próximo paso concreto: commit de corrección del `SKILL.md`; después 2.7, sesión nueva del agente
+- Avance: 30 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: C-13 y entrega
+- Último commit: `65c2286` fix: restaurar SKILL.md… (6/11; verificado en GitHub)
+- Próximo paso concreto: commit de cierre de la fase 2; E.10 (instalar `openspec` 1.14.1); después 4.1 explore del C-13
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
@@ -77,7 +77,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] E.8 `opencode mcp list` muestra `mysql` conectado (comprobado también en un CMD nuevo, sin variables manuales)
 - [x] E.8b Contraseña del agente sincronizada entre MySQL y Windows (5/11) — evidencia: `CONEXION OK [ { n: 4 } ]` con `mysql2` y `MYSQL_PASS_AGENTE`
 - [x] E.9 Modelo configurado en el escritorio: Big Pickle (gratuito, sin API key)
-- [ ] E.10 Instalar el CLI `openspec` (lo exigen las skills OPSX del repo; antes de la fase 4)
+- [ ] E.10 Instalar el CLI `openspec` **1.14.1** (la versión que generó las skills OPSX del repo: `generatedBy: "1.14.1"`); nunca `openspec init`
 - Nota: OpenCode se usa desde la terminal de VS Code; la consola vieja de Windows no dibuja los íconos (`?`) ni pega con Ctrl+V
 
 ## Fase 1 — Ficha de investigación → `docs/skills-mcp/investigacion.md` (máx 2 páginas)
@@ -88,11 +88,11 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Fase 2 — Skill propia
 - [x] 2.1 Instalar la skill creadora y comprobar que el agente la ve — 6/11, global en `~/.config/opencode/skills/skill-creator` (git sparse, sin npx); el agente la lista (captura)
 - [x] 2.2 Generar la skill propia con ella (guardar el prompt usado) — prompt en `docs/skills-mcp/evidencias/prompt-skill-creator.md`; versión original del agente en commit `7b3928b` (6/11, Big Pickle, 2 min 50 s, solo creó el `SKILL.md`)
-- [ ] 2.3 Revisar y adaptar lo generado al dominio (anotar qué se cambió) — 5 ajustes propuestos por Claude (H19); evidencia = `git diff 7b3928b` del commit de ajustes
+- [x] 2.3 Revisar y adaptar lo generado al dominio (anotar qué se cambió) — 5 ajustes (H19); evidencia: `git diff 7b3928b 65c2286 -- .opencode/skills/revisor-escenarios-turnos/SKILL.md` (7 líneas agregadas, 4 quitadas)
 - [x] 2.4 Guardarla en `.opencode/skills/revisor-escenarios-turnos/SKILL.md` — commit `7b3928b`
 - [x] 2.5 Registrar en `.atl/skill-registry.md` — sección "Project Skills" + compact rules, commit `b677119`
 - [x] 2.6 Actualizar `AGENTS.md` y `CLAUDE.md` con el mismo texto — fila en la tabla, sección de la skill, paso 3b del flujo; commit `b677119` (idénticos)
-- [ ] 2.7 Sesión nueva del agente: comprobar que la encuentra sin ayuda
+- [x] 2.7 Sesión nueva del agente: comprobar que la encuentra sin ayuda — 6/11, Big Pickle, 7,1 s: sin nombrarla, el agente identificó la skill, su ubicación, cuándo usarla, qué necesita y qué entrega (captura). Matiz honesto: su respuesta repite casi textual la sección de `AGENTS.md`, o sea que la encontró por la fundación además de por la carpeta de skills, que es justamente el objetivo de registrarla ahí
 
 ## Fase 3 — MCP
 - [x] 3.1 Conexión comprobada (= E.8)
@@ -125,7 +125,8 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
-| 2026-11-06 | Commit de ajustes: registro y AGENTS/CLAUDE correctos; `SKILL.md` quedó con el contenido del registro (H20) | `b677119` | Corregir `SKILL.md` |
+| 2026-11-06 | 2.7: sesión nueva encuentra la skill sola → fase 2 cerrada | pendiente | `openspec` + C-13 |
+| 2026-11-06 | Commit de ajustes (registro y AGENTS/CLAUDE correctos; `SKILL.md` pisado, H20) y corrección | `b677119` · `65c2286` | 2.7 |
 | 2026-11-06 | `skill-creator` instalada (git, global); skill generada por el agente con el prompt versionado; Claude revisa y propone 5 ajustes; registro y AGENTS/CLAUDE preparados | `7b3928b` | Commit de ajustes; 2.7 |
 | 2026-11-06 | Sesión A: sección MCP en `AGENTS.md`/`CLAUDE.md` (idénticos) y ficha actualizada. El pegado de varias líneas en PowerShell dejó copias a medias; se rehízo en una sola línea | `06247de` | Skill propia |
 | 2026-11-05 (cierre) | Fechas de entrega recibidas; plan acelerado A/B/C + video | sin commit (esta versión se sube al empezar la sesión A) | Sesión A |
