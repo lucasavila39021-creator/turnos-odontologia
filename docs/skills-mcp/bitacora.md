@@ -22,10 +22,11 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 37 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: cerrar el C-13 en CHANGES y la entrega
-- Último commit: `fd0d274` feat: ajustar spec del C-13 segun la skill y segunda revision (6/11)
-- Próximo paso concreto: commit de 4.7 (C-13 preparado en `CHANGES.md`) + fila de H21 en el README; después la fase 5 (entrega del repo)
+- Avance: 39 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Fases 0–4 completas. Falta: entrega (informe, capturas, ENTREGA.md, zip, prueba en limpio) y video
+- Último commit: `03dd6da` docs: C-13 preparado en CHANGES y problema del servicio MySQL en el README (6/11)
+- Próximo paso concreto: cerrar hoy (pedido de Lucas): capturas a `evidencias/capturas/` sin la que muestra la contraseña → commit final → prueba en limpio → `ENTREGA.md` con el hash → zip `TP-Skills-MCP-Avila.zip`
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
+- Integrantes: TP grupal que Lucas decidió hacer solo (6/11). `Lucas Avila` y `lucasavila39021-creador` en el historial son la misma persona (nombre del equipo y cuenta de GitHub)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
 ## Entornos
@@ -109,14 +110,14 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 4.4 Pasar la skill propia sobre el spec → corregir con Ajustar — 1.ª pasada AJUSTAR (`f28bb93`, `evidencias/c13-revision-skill.md`); ajustes con `evidencias/prompt-c13-ajustar.md`; 2.ª pasada **OK** (`fd0d274`, `evidencias/c13-revision-skill-2.md`): 21 escenarios, todos con GIVEN, concurrencia incluida, zona horaria corregida dentro del horario; `openspec validate` → *Change is valid*
 - [x] 4.5 tasks.md indica cómo se testea cada escenario — tabla "Cobertura de escenarios del spec" (13 filas: clase de test y tipo)
 - [x] 4.6 Revisar reglas contra `knowledge-base/05_reglas_de_negocio.md` — la hizo la skill (tabla RN-TU-01…11, RN-PR-05, RN-GL-02) y Claude la verificó (H24); RN-TU-11 queda como tarea 4.2 del change
-- [ ] 4.7 C-13 en CHANGES.md como "preparado" (NO archivado) — texto listo (6/11), falta commit
+- [x] 4.7 C-13 en CHANGES.md como "preparado" (NO archivado) — commit `03dd6da` (6/11)
 
 ## Fase 5 — Revisión crítica y entrega
 - [ ] 5.0 Pasar las capturas de la carpeta del escritorio a `docs/skills-mcp/evidencias/`
-- [ ] 5.1 Error/omisión del agente: cómo se detectó, qué fuente lo corrigió, antes/después
-- [ ] 5.2 `docs/skills-mcp/aplicacion.md` (máx 2 páginas)
+- [x] 5.1 Error/omisión del agente: cómo se detectó, qué fuente lo corrigió, antes/después — 4 casos en la sección 3 de `aplicacion.md` (H12/H14, H19, H24, H1/H2)
+- [ ] 5.2 `docs/skills-mcp/aplicacion.md` (máx 2 páginas) — versión final de Claude (6/11, ~870 palabras), falta commit
 - [ ] 5.3 Video ≤ 5 min
-- [ ] 5.4 `ENTREGA.md`: integrantes, link repo, hash del commit de entrega, link al video
+- [ ] 5.4 `ENTREGA.md`: integrantes, link repo, hash del commit de entrega, link al video — se genera fuera del repo con el hash real del último commit; el link del video se agrega al subirlo (hasta 20/11)
 - [ ] 5.5 Zip `TP-Skills-MCP-Avila.zip`
 - [ ] 5.6 Clonar en limpio y seguir el README como otra persona
 
@@ -125,6 +126,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-06 | C-13 preparado en `CHANGES.md`; fila H21 en el README; Claude contrasta el TP con la consigna y redacta `aplicacion.md` | `03dd6da` | Integrantes; capturas; ENTREGA |
 | 2026-11-06 | Ajustes aplicados por el agente; 2.ª pasada de la skill: OK; Claude verificó 21 escenarios con GIVEN y la zona horaria corregida | `fd0d274` | C-13 preparado en CHANGES |
 | 2026-11-06 | La skill audita el spec: AJUSTAR, encontró los 3 huecos sembrados + 8 más; Claude detecta 1 error de la skill (H24) | `f28bb93` | Aplicar ajustes y 2.ª pasada |
 | 2026-11-06 | Propose del C-13: 4 artefactos, 13 escenarios, tabla de cobertura de tests; revisado por Claude (H23) | `ca2f1dc` | Correr la skill (4.4) |
