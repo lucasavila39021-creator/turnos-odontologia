@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 36 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: cerrar el C-13 (skill sobre el spec) y entrega
-- Último commit: `f28bb93` docs: revision del spec del C-13 con la skill revisor-escenarios-turnos (6/11)
-- Próximo paso concreto: 4.4 — aplicar AJUSTAR con `evidencias/prompt-c13-ajustar.md` y segunda pasada de la skill
+- Avance: 37 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: cerrar el C-13 en CHANGES y la entrega
+- Último commit: `fd0d274` feat: ajustar spec del C-13 segun la skill y segunda revision (6/11)
+- Próximo paso concreto: commit de 4.7 (C-13 preparado en `CHANGES.md`) + fila de H21 en el README; después la fase 5 (entrega del repo)
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
@@ -106,10 +106,10 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 4.1 Explore (usando el MCP) → guardar resumen — 6/11, commit `0625159`: prompt `evidencias/prompt-c13-explore.md`, resumen `evidencias/c13-explore.md`; 3 llamadas a `mysql_query` en el log (19:16 UTC, sesión `386cc45d`); 2 min 30 s
 - [x] 4.2 Propose: proposal.md, design.md, specs/, tasks.md — 6/11, commit `ca2f1dc`, `openspec/changes/c-13-turnos-por-sillon/` (prompt `evidencias/prompt-c13-propose.md`)
 - [x] 4.3 Spec con ≥3 escenarios dado/cuando/entonces: feliz, error de negocio, borde — 13 escenarios en 3 requisitos (feliz: sillones distintos; error: mismo sillón 409; bordes: contiguo, cancelado, legacy, sugeridos; validación 400/404)
-- [ ] 4.4 Pasar la skill propia sobre el spec → corregir con Ajustar — 1.ª pasada: AJUSTAR (commit `f28bb93`, `evidencias/c13-revision-skill.md`); ajustes con `evidencias/prompt-c13-ajustar.md`; falta la 2.ª pasada
+- [x] 4.4 Pasar la skill propia sobre el spec → corregir con Ajustar — 1.ª pasada AJUSTAR (`f28bb93`, `evidencias/c13-revision-skill.md`); ajustes con `evidencias/prompt-c13-ajustar.md`; 2.ª pasada **OK** (`fd0d274`, `evidencias/c13-revision-skill-2.md`): 21 escenarios, todos con GIVEN, concurrencia incluida, zona horaria corregida dentro del horario; `openspec validate` → *Change is valid*
 - [x] 4.5 tasks.md indica cómo se testea cada escenario — tabla "Cobertura de escenarios del spec" (13 filas: clase de test y tipo)
 - [x] 4.6 Revisar reglas contra `knowledge-base/05_reglas_de_negocio.md` — la hizo la skill (tabla RN-TU-01…11, RN-PR-05, RN-GL-02) y Claude la verificó (H24); RN-TU-11 queda como tarea 4.2 del change
-- [ ] 4.7 C-13 en CHANGES.md como "preparado" (NO archivado)
+- [ ] 4.7 C-13 en CHANGES.md como "preparado" (NO archivado) — texto listo (6/11), falta commit
 
 ## Fase 5 — Revisión crítica y entrega
 - [ ] 5.0 Pasar las capturas de la carpeta del escritorio a `docs/skills-mcp/evidencias/`
@@ -125,6 +125,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-06 | Ajustes aplicados por el agente; 2.ª pasada de la skill: OK; Claude verificó 21 escenarios con GIVEN y la zona horaria corregida | `fd0d274` | C-13 preparado en CHANGES |
 | 2026-11-06 | La skill audita el spec: AJUSTAR, encontró los 3 huecos sembrados + 8 más; Claude detecta 1 error de la skill (H24) | `f28bb93` | Aplicar ajustes y 2.ª pasada |
 | 2026-11-06 | Propose del C-13: 4 artefactos, 13 escenarios, tabla de cobertura de tests; revisado por Claude (H23) | `ca2f1dc` | Correr la skill (4.4) |
 | 2026-11-06 | MySQL estaba detenido (H21) → servicio automático; explore del C-13 con el MCP; 4 decisiones confirmadas por Lucas; resumen revisado por Claude contra el código (H22) | `0625159` | Propose |

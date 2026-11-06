@@ -352,7 +352,7 @@ Paso │ Agente A (Backend Core)                │ Agente B (Backend Dominio)  
 > Changes agregados después del cierre del MVP (C-01 a C-12). Nacen de puntos que la propia knowledge-base dejó abiertos.
 
 ### [C-13] `turnos-por-sillon`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[~]` **preparado** — propose completo en `openspec/changes/c-13-turnos-por-sillon/` (proposal, design, spec delta con 21 escenarios, tasks con cobertura de tests); spec auditado con la skill `revisor-escenarios-turnos` (AJUSTAR → corregido → **OK**) y `openspec validate` válido. **No implementado ni archivado.** Pendiente al implementar: agregar RN-TU-11 a la knowledge-base (task 4.2).
 - **Origen**: `knowledge-base/10_preguntas_abiertas.md` — pregunta Alta "¿Cuántas sedes/sillones hay y si v1 debe soportar más de una?" (valida SU-01). Hoy el turno se valida solo por profesional (RN-TU-01) y por paciente (RN-TU-05); el recurso físico (sillón/box) no existe en el modelo.
 - **Scope**: Asignar un sillón/box a cada turno nuevo y evitar que dos turnos `RESERVADO` se solapen en el mismo sillón, aunque sean de profesionales distintos. Una sola sede (se mantiene SU-01).
   - Modelo: tabla `sillon` (`id`, `nombre`, `activo`) y columna `turno.sillon_id` FK → `sillon`, nullable para no romper los turnos existentes (regla del proyecto: migración forward-only, nunca `NOT NULL` sin default).

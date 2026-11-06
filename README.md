@@ -214,6 +214,7 @@ Solo se usa contra la base de desarrollo, con datos ficticios.
 | `Connection closed` y avisos `EPERM` | `npx` dejó su caché a medio descargar | `npm install -g` en lugar de `npx` |
 | `opencode mcp list` se queda colgado | OpenCode no puede lanzar el atajo `.cmd` que npm crea en Windows | `"command": ["node", "<ruta>\\dist\\index.js"]` |
 | `mcp list` dice *connected*, pero el agente no puede usar la base (`failed to get resources`) | La clave de `MYSQL_PASS_AGENTE` y la de MySQL no coincidían: listar herramientas no entra a la base, consultar sí | Misma clave en `ALTER USER` y en `setx`. Prueba directa: `ER_ACCESS_DENIED_ERROR` → `CONEXION OK` |
+| `opencode mcp list` falla y `Get-Service *mysql*` muestra `Stopped` | El servicio de MySQL había quedado con arranque manual | PowerShell como administrador: `Set-Service MySQL2610 -StartupType Automatic; Start-Service MySQL2610` |
 
 ## Docs
 
