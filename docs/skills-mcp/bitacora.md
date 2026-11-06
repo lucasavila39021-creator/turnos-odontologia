@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 39 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Fases 0–4 completas. Falta: entrega (informe, capturas, ENTREGA.md, zip, prueba en limpio) y video
+- Avance: 41 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Fases 0–4 completas. Falta: entrega (informe, capturas, ENTREGA.md, zip, prueba en limpio) y video
 - Último commit: `03dd6da` docs: C-13 preparado en CHANGES y problema del servicio MySQL en el README (6/11)
-- Próximo paso concreto: cerrar hoy (pedido de Lucas): capturas a `evidencias/capturas/` sin la que muestra la contraseña → commit final → prueba en limpio → `ENTREGA.md` con el hash → zip `TP-Skills-MCP-Avila.zip`
+- Próximo paso concreto: commit del índice → prueba en limpio (5.6) → `ENTREGA.md` con el hash del último commit → zip `TP-Skills-MCP-Avila.zip`. El commit de entrega figura en `ENTREGA.md`
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Integrantes: TP grupal que Lucas decidió hacer solo (6/11). `Lucas Avila` y `lucasavila39021-creador` en el historial son la misma persona (nombre del equipo y cuenta de GitHub)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
@@ -113,9 +113,9 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 4.7 C-13 en CHANGES.md como "preparado" (NO archivado) — commit `03dd6da` (6/11)
 
 ## Fase 5 — Revisión crítica y entrega
-- [ ] 5.0 Pasar las capturas de la carpeta del escritorio a `docs/skills-mcp/evidencias/`
+- [x] 5.0 Pasar las capturas de la carpeta del escritorio a `docs/skills-mcp/evidencias/` — `evidencias/capturas/` (commit `7b991e2`); Claude revisó las 8 imágenes y los 2 .txt: ninguna muestra contraseñas; índice en `capturas/INDICE.md`
 - [x] 5.1 Error/omisión del agente: cómo se detectó, qué fuente lo corrigió, antes/después — 4 casos en la sección 3 de `aplicacion.md` (H12/H14, H19, H24, H1/H2)
-- [ ] 5.2 `docs/skills-mcp/aplicacion.md` (máx 2 páginas) — versión final de Claude (6/11, ~870 palabras), falta commit
+- [x] 5.2 `docs/skills-mcp/aplicacion.md` (máx 2 páginas) — commit `7b991e2` (~870 palabras), enlazado al índice de capturas
 - [ ] 5.3 Video ≤ 5 min
 - [ ] 5.4 `ENTREGA.md`: integrantes, link repo, hash del commit de entrega, link al video — se genera fuera del repo con el hash real del último commit; el link del video se agrega al subirlo (hasta 20/11)
 - [ ] 5.5 Zip `TP-Skills-MCP-Avila.zip`
@@ -126,6 +126,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-06 | Informe y capturas subidos; Claude revisa las capturas (sin secretos) y arma su índice | `7b991e2` | Prueba en limpio, ENTREGA y zip |
 | 2026-11-06 | C-13 preparado en `CHANGES.md`; fila H21 en el README; Claude contrasta el TP con la consigna y redacta `aplicacion.md` | `03dd6da` | Integrantes; capturas; ENTREGA |
 | 2026-11-06 | Ajustes aplicados por el agente; 2.ª pasada de la skill: OK; Claude verificó 21 escenarios con GIVEN y la zona horaria corregida | `fd0d274` | C-13 preparado en CHANGES |
 | 2026-11-06 | La skill audita el spec: AJUSTAR, encontró los 3 huecos sembrados + 8 más; Claude detecta 1 error de la skill (H24) | `f28bb93` | Aplicar ajustes y 2.ª pasada |

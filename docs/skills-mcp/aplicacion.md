@@ -2,7 +2,7 @@
 
 **Materia:** Metodología I · **Proyecto:** turnos-odontologia · **Rama:** `tp-skills-mcp` · **Integrante:** Lucas Ávila (trabajo grupal realizado individualmente) · **Fecha:** 2026-11-06
 
-Detalle cronológico, comandos y hallazgos H1–H24: [bitácora](bitacora.md). Ficha previa: [investigación](investigacion.md).
+Detalle cronológico, comandos y hallazgos H1–H24: [bitácora](bitacora.md). Ficha previa: [investigación](investigacion.md). Capturas: [índice](evidencias/capturas/INDICE.md).
 
 ## 1. Resultados
 
