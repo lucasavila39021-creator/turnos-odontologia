@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 31 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: C-13 y entrega
-- Último commit: `a466d3a` docs: bitacora con la fase de skill completa (6/11)
-- Próximo paso concreto: 4.1 — `/opsx-explore` del C-13 con el prompt versionado `docs/skills-mcp/evidencias/prompt-c13-explore.md` (usa el MCP)
+- Avance: 32 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Falta: C-13 y entrega
+- Último commit: `0625159` docs: explore del C-13 con el MCP de MySQL (6/11)
+- Próximo paso concreto: 4.2 — `/opsx-propose` con `evidencias/prompt-c13-propose.md`
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
@@ -103,8 +103,8 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 3.5 AGENTS.md / CLAUDE.md: propósito del MCP, tools, cuándo, límites — sección idéntica en ambos, commit `06247de` (6/11)
 
 ## Fase 4 — Preparar el change C-13 (SDD)
-- [ ] 4.1 Explore (usando el MCP) → guardar resumen — prompt en `docs/skills-mcp/evidencias/prompt-c13-explore.md`; resumen irá a `docs/skills-mcp/evidencias/c13-explore.md`
-- [ ] 4.2 Propose: proposal.md, design.md, specs/, tasks.md
+- [x] 4.1 Explore (usando el MCP) → guardar resumen — 6/11, commit `0625159`: prompt `evidencias/prompt-c13-explore.md`, resumen `evidencias/c13-explore.md`; 3 llamadas a `mysql_query` en el log (19:16 UTC, sesión `386cc45d`); 2 min 30 s
+- [ ] 4.2 Propose: proposal.md, design.md, specs/, tasks.md — prompt `evidencias/prompt-c13-propose.md`; nombre del change `c-13-turnos-por-sillon`
 - [ ] 4.3 Spec con ≥3 escenarios dado/cuando/entonces: feliz, error de negocio, borde
 - [ ] 4.4 Pasar la skill propia sobre el spec → corregir con Ajustar
 - [ ] 4.5 tasks.md indica cómo se testea cada escenario
@@ -125,6 +125,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-06 | MySQL estaba detenido (H21) → servicio automático; explore del C-13 con el MCP; 4 decisiones confirmadas por Lucas; resumen revisado por Claude contra el código (H22) | `0625159` | Propose |
 | 2026-11-06 | 2.7: sesión nueva encuentra la skill sola → fase 2 cerrada; `openspec` 1.14.1 instalado | `a466d3a` | Explore del C-13 |
 | 2026-11-06 | Commit de ajustes (registro y AGENTS/CLAUDE correctos; `SKILL.md` pisado, H20) y corrección | `b677119` · `65c2286` | 2.7 |
 | 2026-11-06 | `skill-creator` instalada (git, global); skill generada por el agente con el prompt versionado; Claude revisa y propone 5 ajustes; registro y AGENTS/CLAUDE preparados | `7b3928b` | Commit de ajustes; 2.7 |
@@ -171,3 +172,5 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
   4. **No contemplaba reglas nuevas que propone el propio change** (el C-13 propone RN-TU-11, por sillón): las habría tratado como inventadas. Ajuste: leer `proposal.md`/`design.md` y tratarlas como "regla propuesta por el change", exigiendo escenarios y actualización de la KB.
   5. Aunque su descripción menciona sillón/box, **el checklist no tenía ningún borde de sillón**. Ajuste: ítem 11 (mismo sillón con profesionales distintos, sillones distintos, contiguo, cancelado libera, turnos viejos sin sillón).
 - **H20 — Un comodín de Windows pisó la skill (6/11, verificado en GitHub).** En `b677119`, el comando `U "SKILL*.md"` tomó el archivo más reciente que empezaba con "skill": **`skill-registry.md`**, porque Windows no distingue mayúsculas en los nombres. Resultado: `.opencode/skills/revisor-escenarios-turnos/SKILL.md` quedó con el contenido del registro (por eso el commit marcó 211 líneas cambiadas en ese archivo). Se detectó comparando lo subido con lo entregado. Corrección: copiar el `SKILL.md` excluyendo `skill-registry*`. La evidencia del 2.3 se mira con `git diff 7b3928b <commit de corrección> -- .opencode/skills/revisor-escenarios-turnos/SKILL.md`, que salta el commit roto.
+- **H21 — El servicio de MySQL estaba detenido (6/11).** Antes del explore, `Get-Service *mysql*` mostró `MySQL2610` en `Stopped`: había quedado con arranque manual. Sin el servicio, el MCP no puede conectar. Solución (PowerShell como administrador): `Set-Service MySQL2610 -StartupType Automatic; Start-Service MySQL2610`. Va a la tabla de problemas del README.
+- **H22 — Explore del C-13 verificado (6/11).** El agente usó `mysql_query` (3 llamadas en el log) y su resumen coincide con la base: no hay tabla `sillon`, no hay `sillon_id`, y los turnos 1 y 2 (profesionales distintos, 2026-11-03 10:00, `RESERVADO`) son el choque de sillón que hoy se acepta. Claude contrastó con el código las afirmaciones sobre concurrencia y errores: `TurnoService` usa TX `SERIALIZABLE`, un lock JVM por profesional (`synchronized`), `PESSIMISTIC_WRITE` sobre `profesional`, y `TurnoOcupadoException("Horario ocupado")` con sugeridos; todo es cierto. Punto a vigilar en el propose: el diseño agrega un segundo lock (sillón) y el comentario del código dice "sin anidamiento → sin deadlock"; tomar siempre los locks en el mismo orden (profesional → sillón) evita el deadlock, pero el `design.md` tiene que justificarlo. Aporte del agente que no estaba en el prompt: los `sugeridos` del 409 también tienen que filtrar por sillón. Nota para el video: los turnos de prueba se crearon para "mañana" del 2/11, así que ya están en el pasado; antes de grabar, volver a correr `scripts/dev-db-nativo.sql`.
