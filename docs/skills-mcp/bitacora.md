@@ -22,9 +22,10 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 41 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Fases 0–4 completas. Falta: entrega (informe, capturas, ENTREGA.md, zip, prueba en limpio) y video
+- Avance: 42 de 45 casillas. Hecho: entorno, base, MCP, ficha y skill propia. Repositorio completo; faltan ENTREGA y zip (se generan fuera del repo) y el video (hasta el 20/11)
 - Último commit: `03dd6da` docs: C-13 preparado en CHANGES y problema del servicio MySQL en el README (6/11)
-- Próximo paso concreto: commit del índice → prueba en limpio (5.6) → `ENTREGA.md` con el hash del último commit → zip `TP-Skills-MCP-Avila.zip`. El commit de entrega figura en `ENTREGA.md`
+- Último commit antes de este registro: `40bffc6` docs: indice de capturas de evidencia
+- Próximo paso concreto: subir el zip al campus; antes del 20/11, guion y grabación del video (5.3) y agregar su enlace a `ENTREGA.md`. Antes de grabar, volver a correr `scripts/dev-db-nativo.sql` (los turnos de prueba quedaron en el pasado)
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Integrantes: TP grupal que Lucas decidió hacer solo (6/11). `Lucas Avila` y `lucasavila39021-creador` en el historial son la misma persona (nombre del equipo y cuenta de GitHub)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
@@ -117,15 +118,16 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 5.1 Error/omisión del agente: cómo se detectó, qué fuente lo corrigió, antes/después — 4 casos en la sección 3 de `aplicacion.md` (H12/H14, H19, H24, H1/H2)
 - [x] 5.2 `docs/skills-mcp/aplicacion.md` (máx 2 páginas) — commit `7b991e2` (~870 palabras), enlazado al índice de capturas
 - [ ] 5.3 Video ≤ 5 min
-- [ ] 5.4 `ENTREGA.md`: integrantes, link repo, hash del commit de entrega, link al video — se genera fuera del repo con el hash real del último commit; el link del video se agrega al subirlo (hasta 20/11)
-- [ ] 5.5 Zip `TP-Skills-MCP-Avila.zip`
-- [ ] 5.6 Clonar en limpio y seguir el README como otra persona
+- [ ] 5.4 `ENTREGA.md`: integrantes, link repo, hash del commit de entrega, link al video — se genera fuera del repo con `git rev-parse` del commit siguiente a este registro (el de la bitácora final); link del video pendiente hasta el 20/11
+- [ ] 5.5 Zip `TP-Skills-MCP-Avila.zip` — se genera en el Escritorio, con: `ENTREGA.md`, `investigacion.md`, `aplicacion.md`
+- [x] 5.6 Clonar en limpio y seguir el README como otra persona — 6/11: clon nuevo de la rama desde GitHub en `%TEMP%\prueba-limpia`; las 6 piezas presentes (`True`), `opencode mcp list` → `✓ mysql connected` desde el clon, `openspec validate` → válido
 
 ---
 
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-06 | Prueba en limpio superada; repositorio listo para entregar (ENTREGA y zip se generan después de este commit y se tildan en el commit del video) | `40bffc6` + bitácora final | Video |
 | 2026-11-06 | Informe y capturas subidos; Claude revisa las capturas (sin secretos) y arma su índice | `7b991e2` | Prueba en limpio, ENTREGA y zip |
 | 2026-11-06 | C-13 preparado en `CHANGES.md`; fila H21 en el README; Claude contrasta el TP con la consigna y redacta `aplicacion.md` | `03dd6da` | Integrantes; capturas; ENTREGA |
 | 2026-11-06 | Ajustes aplicados por el agente; 2.ª pasada de la skill: OK; Claude verificó 21 escenarios con GIVEN y la zona horaria corregida | `fd0d274` | C-13 preparado en CHANGES |
