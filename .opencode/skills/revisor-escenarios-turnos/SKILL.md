@@ -1,98 +1,116 @@
-# Skill Registry
+---
+name: revisor-escenarios-turnos
+description: Audita el spec de un change de turnos, agenda, profesionales o recurso físico (sillón/box) contra las reglas de negocio de knowledge-base/05_reglas_de_negocio.md y detecta escenarios faltantes, ambiguos o mal formados. Usarla SIEMPRE después de un propose que toque turnos/agenda/profesionales/sillón-box y antes de aprobar el spec, y también cuando el usuario diga "revisá los escenarios", "¿le falta algún caso al spec?", "auditá el spec de turnos" o pida validar que un spec cubre las reglas RN-TU. No modifica archivos: solo informa.
+---
 
-**Delegator use only.** Any agent that launches sub-agents reads this registry to resolve compact rules, then injects them directly into sub-agent prompts. Sub-agents do NOT read this registry or individual SKILL.md files.
+# Revisor de escenarios de turnos
 
-See `_shared/skill-resolver.md` for the full resolution protocol.
+Auditás specs de changes que tocan turnos contra las reglas de negocio del dominio. El objetivo es detectar, antes de aprobar el spec, qué escenarios faltan, cuáles son ambiguos y cuáles no prueban nada observable. Una regla sin escenario es una regla que se va a romper en producción sin que ningún test lo note: por eso el entregable es un cruce explícito regla → escenario, no una impresión general.
 
-## User Skills
+## Entradas
 
-| Trigger | Skill | Path |
-|---------|-------|------|
-| Use when building or reviewing a Spring Boot backend — REST layer, services, data access, caching, or async work | springboot-patterns | /home/dev/.agents/skills/springboot-patterns/SKILL.md |
-| Use when reviewing Spring Security authn/authz, validation, CSRF, secrets, headers, or rate limiting | springboot-security | /home/dev/.agents/skills/springboot-security/SKILL.md |
-| Use when writing a schema or data migration, adding a column or index to a large table, planning a rollback, or preparing a zero-downtime deploy | database-migrations | /home/dev/.agents/skills/database-migrations/SKILL.md |
-| Use when creating or modifying MySQL tables, indexes, or queries; diagnosing slow/locking behavior; planning migrations; or troubleshooting replication | mysql | /home/dev/.agents/skills/mysql/SKILL.md |
-| Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one | frontend-design | /home/dev/.agents/skills/frontend-design/SKILL.md |
-| Toolkit for interacting with and testing local web applications using Playwright | webapp-testing | /home/dev/.agents/skills/webapp-testing/SKILL.md |
+Antes de auditar, reuní este contexto:
 
-## Project Skills
+1. **Spec del change**: `openspec/changes/<change>/specs/**/spec.md`. Puede haber más de una capability; auditá todas las que toquen turnos, agenda, profesionales o el recurso físico (sillón/box).
+2. **Reglas de negocio**: `knowledge-base/05_reglas_de_negocio.md`. Es la fuente de verdad. No inventes reglas que no estén ahí.
+3. **Contexto del change**: si existe, la sección "Leer antes" del change en `CHANGES.md`, y `proposal.md` y `design.md` del change. Sirven para saber qué reglas espera tocar el change, qué decisiones ya están tomadas y si el change **propone reglas nuevas** que todavía no están en la knowledge-base (por ejemplo, el C-13 propone `RN-TU-11`, no superposición por sillón).
+4. **Opcional, solo si el spec menciona columnas, índices o constraints**: verificá el esquema real con el MCP `mysql` (`mysql_query`, por ejemplo `SHOW CREATE TABLE turno`). Nunca contra las migraciones ni contra suposiciones. Si la herramienta no está disponible, decilo explícitamente y no reemplaces la verificación por otra cosa.
 
-Skills propias del proyecto, versionadas en el repo (las recibe cualquiera que clone).
+Si el change no toca turnos/agenda/profesionales/sillón-box, no apliques esta skill: avisá que no corresponde y por qué.
 
-| Trigger | Skill | Path |
-|---------|-------|------|
-| Use after an OpenSpec `propose` of a change that touches turnos, agenda, profesionales or sillón/box, before approving the spec; or when asked to review/audit spec scenarios against RN-TU rules | revisor-escenarios-turnos | .opencode/skills/revisor-escenarios-turnos/SKILL.md |
+## Procedimiento
 
-## Compact Rules
+### 1. Inventario y clasificación
 
-Pre-digested rules per skill. Delegators copy matching blocks into sub-agent prompts as `## Project Standards (auto-resolved)`.
+Listá **todos** los escenarios del spec (todas las secciones `#### Scenario:`). Para cada uno anotá:
 
-### springboot-patterns
-- Controller → Service → Repository layered architecture; keep controllers thin, services focused, repositories simple
-- Constructor injection only (no field injection); use DTOs `CreateXxxRequest`/`XxxResponse` with `from()` mapper and Bean Validation `@Valid`
-- `ResponseEntity` with correct status (201 CREATED) + `Page<DTO>` via `map()`; central `@ControllerAdvice` for `ApiError` RFC 7807 (`spring.mvc.problemdetails.enabled=true`)
-- `@Transactional` on service writes, `@Transactional(readOnly=true)` for queries; configure HikariCP pool/timeouts
-- Caching requires `@EnableCaching` + `@Cacheable/@CacheEvict`; async requires `@EnableAsync` + `@Async CompletableFuture`
-- SLF4J structured logging `log.info("op key={}", val)` + `OncePerRequestFilter` for request duration; never log secrets
-- Rate limiting via `OncePerRequestFilter` + Bucket4j using `request.getRemoteAddr()` (with `ForwardedHeaderFilter` + `server.forward-headers-strategy` behind proxy); exponential-backoff retry for external calls
+- título y ubicación (`archivo:línea` si es útil);
+- clasificación: **feliz** (camino exitoso), **error de negocio** (rechazo por una regla) o **borde** (límite exacto, estado especial, concurrencia, zona horaria);
+- requisito al que pertenece.
 
-### springboot-security
-- Prefer stateless JWT/opaque tokens; cookies must be `httpOnly, Secure, SameSite=Strict/Lax`; validate via `OncePerRequestFilter` or resource server
-- `@EnableMethodSecurity` + `@PreAuthorize("hasRole('ADMIN')")` or `@authz.isOwner(#id)`; deny by default, least privilege
-- DTO validation `@Valid` with `@NotBlank/@Email/@Size` + custom validators; never concatenate SQL — use `:param` or derived queries
-- Passwords via `PasswordEncoder` bean `BCryptPasswordEncoder(12)`; never store plaintext
-- CSRF enabled for session/SSR, disabled + `STATELESS` for pure Bearer APIs; CORS at `SecurityFilterChain` level, never `*` in prod
-- Security headers: CSP `default-src 'self'`, `frameOptions sameOrigin`, `referrerPolicy NO_REFERRER`; secrets via `${ENV_VAR}` or Vault, never in code/yaml
-- Rate limit with Bucket4j (429 + retry hint); scan deps with OWASP/Snyk, fail build on CVEs; never log tokens/PII
+Si un spec no tiene ningún escenario de una clase, eso ya es un hallazgo.
 
-### database-migrations
-- Every change is a migration; migrations are forward-only and immutable once deployed — create new migration to fix
-- Never mix DDL and DML in one migration; new columns must be nullable or with default (never `NOT NULL` without default)
-- Use `CREATE INDEX CONCURRENTLY` (outside tx) for existing tables; batch backfills (5k-10k rows, `SKIP LOCKED`, `bulk_update`)
-- Zero-downtime renames via expand-contract: 1 EXPAND add column/table + dual-write → 2 MIGRATE backfill + read new → 3 CONTRACT drop old
-- Flyway: `V{n}__name.sql` + `migrate deploy` (`validate` in prod); Django: `makemigrations`/`migrate`/`SeparateDatabaseAndState` for deferred drops
-- Always include UP and DOWN (or mark irreversible); test against prod-sized data; document rollback plan
-- `golang-migrate`/`Kysely`/`Prisma`: use `Kysely<any>` in migrations, `--create-only` for custom SQL; never edit deployed SQL
+### 2. Formato de cada escenario
 
-### mysql
-- `BIGINT UNSIGNED AUTO_INCREMENT` PK for OLTP; avoid random UUID as clustered PK — put UUID in secondary unique col if needed
-- Always `utf8mb4`/`utf8mb4_0900_ai_ci`; prefer `NOT NULL`, `DATETIME` over `TIMESTAMP`; use lookup tables over `ENUM`; 3NF then denormalize only for hot paths
-- Composite indexes: equality columns first, then range/sort (leftmost prefix); range predicate stops later columns; secondary indexes include PK implicitly
-- Query: check `EXPLAIN` for `ALL/filesort/temporary`; cursor pagination not `OFFSET`; no functions on indexed cols in `WHERE`; batch inserts 500-5000 rows
-- `REPEATABLE READ` default (gap locks) → use `READ COMMITTED` for high contention; consistent row access order + retry 1213 with backoff; `SELECT ... FOR UPDATE` sparingly; I/O outside tx
-- Online DDL `ALGORITHM=INPLACE` when possible; test on replica; tune HikariCP pooling; monitor `performance_schema` to drop unused indexes (`count_read=0`)
-- Never run destructive drops/deletes without explicit human approval; include rollback + post-deploy verification for prod changes
+Verificá que cada escenario tenga:
 
-### frontend-design
-- Ground design in odontologia subject matter; plan tokens first: 4-6 hex palette, 1-2 typefaces with distinct roles, layout ASCII wireframe, principles
-- Typography personality: one family or two distinct; scale per Elements of Typographic Style; <80ch lines; no single-word accent, no ALL-CAPS labels, no `—` fragment labels
-- Visual structure encodes information — borders/dividers only when meaningful; numbered markers (01/02) only for true sequences
-- Reject generic defaults: cream #F4F1EA+terracotta, black+acid green, SaaS identical cards, middle-dot meta, tinted near-black, monospace data labels
-- One memorable element, rest quiet; single page-load motion max; motion only answers user action; responsive mobile-first, visible keyboard focus, respect `prefers-reduced-motion`, a11y palette
-- Copy is design: active voice, plain verbs, sentence case, CTA = outcome ("Save changes"); errors give fix, empty states invite action; cohesion across flow
+- estructura **dado / cuando / entonces** (o **GIVEN / WHEN / THEN**), con el "dado" explícito cuando el resultado dependa de un estado previo (turno existente, paciente con reserva, profesional inactivo);
+- un **resultado observable y verificable**: código HTTP, estado resultante del turno (`RESERVADO`/`CANCELADO`/`ATENDIDO`), fila creada o no, campo de error concreto (`fieldErrors.<campo>`), mensaje. "Responde error" o "funciona bien" no son resultados observables;
+- datos concretos cuando el caso lo requiera (horarios, fechas, ids, rol que ejecuta la acción);
+- el **rol/actor** que dispara la acción si la regla depende de RBAC u ownership.
 
-### webapp-testing
-- Python Playwright `sync_playwright()` + `p.chromium.launch(headless=True)`; always `page.goto()` → `wait_for_load_state('networkidle')` before DOM inspect → actions → `browser.close()`
-- Reconnaissance-then-action: screenshot `page.screenshot(full_page=True)` + `page.content()`/`locator().all()` to discover selectors before acting
-- Server lifecycle via `python scripts/with_server.py --server "cmd" --port N -- python script.py` (supports multiple `--server`); always `--help` first, treat script as black box
-- Descriptive selectors: `text=`, `role=`, CSS/ID; explicit waits `wait_for_selector`/`wait_for_timeout`; never inspect before `networkidle` on dynamic apps
-- Bundle scripts/examples in `scripts/` and `examples/` (`element_discovery.py`, `console_logging.py`) — reuse before writing custom logic
-- Headless Chromium only; close browser; handle single and multi-server (backend+frontend) via `with_server.py`
+Marcá como **ambiguo** todo escenario que no permita decidir si pasó o falló sin adivinar la intención del autor, y como **mal formado** el que no tenga cuando/entonces o mezcle varias reglas en un solo caso.
 
-### revisor-escenarios-turnos
-- Read-only audit: never edit spec/design/tasks/KB; report only, the person applies changes
-- Inputs: change spec(s) `openspec/changes/<change>/specs/**/spec.md`, `knowledge-base/05_reglas_de_negocio.md`, `CHANGES.md` "Leer antes", change `proposal.md`/`design.md` (rules proposed by the change, e.g. RN-TU-11)
-- Classify every scenario (feliz / error de negocio / borde) and check dado/cuando/entonces with an observable result (HTTP code, turno state, fieldError)
-- Cross each touched rule (RN-TU-01..09, RN-PR-05, RN-GL-02; RN-TU-10 = out of scope v1) to ≥1 scenario or mark SIN CUBRIR
-- Walk the 11-item edge checklist (contiguous, CANCELADO frees slot, opening hours, past date, same patient, timezone, concurrency, fixed duration, states, reschedule, sillón/box)
-- Every finding cites RN-xx-nn or a checklist item; anything not in the KB = "decisión de dominio a justificar"
-- Schema claims verified only with MCP `mysql_query`; if unavailable, say so and stop that check
-- Output: rule→scenario table, missing scenarios (dado/cuando/entonces + origin), verdict OK | AJUSTAR
+### 3. Cruce regla → escenario
 
-## Project Conventions
+Determiná qué reglas toca el change. Como mínimo revisá `RN-TU-01` a `RN-TU-09` (`RN-TU-10`, anticipación mínima, está **fuera de alcance de v1** según el README: marcala "No aplica" salvo que el change la active), y sumá `RN-PR-05` (especialidad del profesional) y `RN-GL-02` (zona horaria) cuando el change cree/valide turnos. Si el change toca cancelación o reprogramación, `RN-TU-06`, `RN-TU-07` y `RN-TU-08` también son obligatorias. Si toca pacientes o profesionales, considerá las reglas `RN-PA-*` y `RN-PR-*` afectadas.
 
-| File | Path | Notes |
-|------|------|-------|
-| (none) | — | No AGENTS.md / CLAUDE.md / .cursorrules / GEMINI.md found in project root |
+Si el change propone una regla nueva en su `proposal.md` o `design.md`, tratala como **regla propuesta por el change**: no es una regla inventada, pero exigí que tenga escenarios propios y anotá en el veredicto que la knowledge-base debe actualizarse para incluirla.
 
-Read the convention files listed above for project-specific patterns and rules. All referenced paths have been extracted — no need to read index files to discover more.
+Para cada regla tocada, indicá **qué escenario la prueba** (por título) o **SIN CUBRIR**. Una regla puede estar cubierta por más de un escenario; lo que no se acepta es que ningún escenario la ejercite. Ojo: mencionar la regla en el texto del requisito no es lo mismo que tener un escenario que la pruebe.
+
+### 4. Checklist de bordes del dominio
+
+Recorré cada ítem y verificá si el spec lo cubre. Este checklist existe porque son los casos donde la agenda se rompe en la práctica:
+
+1. **Turnos contiguos**: uno termina 10:30 y otro empieza 10:30 → **no** se solapan. El criterio correcto es `hora_inicio < :fin AND hora_fin > :inicio`; el borde `hora_fin == hora_inicio` debe dar 201, no 409.
+2. **Turno CANCELADO no bloquea**: solo `RESERVADO` cuenta para el solape (RN-TU-01). Por la misma regla, un `ATENDIDO` tampoco cuenta para el solape; si el spec dice lo contrario, marcalo como conflicto con RN-TU-01.
+3. **Límites del horario de atención** (RN-TU-03): inicio exactamente en la apertura, inicio en el último bloque que termina justo en el cierre, y un bloque que empieza dentro pero **termina después** del cierre. Ojo: RN-TU-03 solo exige que `hora_inicio` esté dentro del horario; si el spec rechaza ese último caso, no es un error, pero es una **decisión de dominio a justificar** (la regla no dice nada de `hora_fin`).
+4. **Fecha u hora pasada** (RN-TU-04): fecha de ayer y, por separado, hoy con hora ya pasada; ambas en zona horaria de la clínica.
+5. **Mismo paciente en dos turnos solapados con profesionales distintos** (RN-TU-05): el 409 debe salir aunque el profesional sea distinto.
+6. **Zona horaria de la clínica** (RN-GL-02): un turno creado cerca de la medianoche o con hora del servidor en UTC no debe correrse de día/hora. Si el spec no dice nada, marcalo como borde faltante, no como error.
+7. **Concurrencia**: dos reservas simultáneas del mismo hueco (RN-TU-01). El spec debe exigir validación en servicio dentro de una transacción y que la segunda falle con 409, no que ambas pasen. Un índice único por sí solo no cubre solapes parciales.
+8. **Duración fija** (RN-TU-02): `hora_fin = hora_inicio + duración` configurada global; verificar que ningún escenario permita duración por turno en v1.
+9. **Estados y transiciones** (RN-TU-06): no hay `CANCELADO → RESERVADO`; cancelar un turno ya `CANCELADO` o `ATENDIDO` falla (RN-TU-07).
+10. **Reprogramar** (RN-TU-08): se comporta como cancelar + crear, con dos operaciones auditables, no como un "mover" atómico.
+11. **Recurso físico (sillón/box)**, solo si el change lo toca: dos turnos `RESERVADO` de **profesionales distintos** en el **mismo sillón** y horario solapado → rechazo; mismo horario en **sillones distintos** → se aceptan; turno contiguo en el mismo sillón → se acepta (borde 1); turno `CANCELADO` libera el sillón (borde 2); turnos existentes **sin sillón** (columna nueva y nullable) → el spec tiene que decir qué pasa con ellos, y si no lo dice es una **decisión de dominio a justificar**.
+
+Si un ítem no aplica al alcance del change, decilo explícitamente en lugar de omitirlo.
+
+### 5. Proponer los faltantes
+
+Para cada escenario faltante, escribí el caso en **dado / cuando / entonces** y citá de dónde sale: la regla `RN-xx-nn` o el número del ítem del checklist. Proponé el resultado observable concreto (código HTTP, estado, fieldError), coherente con el resto del spec. Si el resultado depende de una decisión que no está en la knowledge-base, **no la inventes**: marcala como **"decisión de dominio a justificar"** y explicá qué falta definir.
+
+## Formato del entregable
+
+Respondé siempre con estas tres secciones, en este orden.
+
+### 1. Tabla regla → escenario
+
+| Regla | ¿La toca el change? | Escenario que la cubre | Estado |
+|-------|---------------------|------------------------|--------|
+| RN-TU-01 | Sí | "Solape profesional devuelve 409", "Turno adyacente no solapa" | Cubierta |
+| RN-TU-03 | Sí | — | **SIN CUBRIR** |
+
+Usá "—" y **SIN CUBRIR** cuando no haya escenario. Aclará "No aplica" cuando la regla quede fuera del alcance del change.
+
+### 2. Escenarios faltantes
+
+Lista numerada; cada ítem con:
+
+- **Origen**: `RN-xx-nn` o "checklist borde N";
+- **Caso propuesto** en dado / cuando / entonces;
+- **Resultado esperado** observable;
+- **Nota** si es "decisión de dominio a justificar".
+
+Ejemplo del estilo esperado:
+
+> **Origen**: RN-TU-01 (checklist borde 1).
+> **Dado** que existe un turno RESERVADO 10:00–10:30 del profesional P,
+> **cuando** se reserva 10:30–11:00 para P,
+> **entonces** responde 201 y se crea la fila (borde contiguo, no hay solape).
+
+### 3. Veredicto
+
+- **OK** si hay al menos un escenario feliz, uno de error de negocio y uno de borde, y todas las reglas tocadas por el change están cubiertas.
+- **AJUSTAR** en caso contrario, con la lista concreta de qué agregar o corregir (escenarios faltantes + escenarios ambiguos/mal formados).
+
+Si el veredicto es AJUSTAR, no alcanza con decir "faltan bordes": enumerá cada escenario a agregar con su origen.
+
+## Reglas de la auditoría
+
+- **No inventar reglas**: si lo que proponés no está en `knowledge-base/05_reglas_de_negocio.md`, marcalo como "decisión de dominio a justificar". La knowledge-base manda; ante conflicto entre el spec y las reglas, señalá el conflicto, no lo resuelvas por tu cuenta.
+- **Citar siempre**: cada hallazgo cita una regla `RN-xx-nn` o un ítem del checklist. Un hallazgo sin cita es una opinión.
+- **No modificar nada**: la skill es de solo lectura sobre el spec y el resto del repo. No editás `spec.md`, `design.md`, `tasks.md` ni la knowledge-base. Los cambios los aplica la persona.
+- **No ejecutar comandos que escriban**: solo lectura de archivos y, si hace falta, `mysql_query` de solo lectura. Nada de migraciones, tests ni scripts propios para suplantar la base.
+- **Distinguir severidad**: un escenario faltante de una regla `RN-TU` es bloqueante; un borde no cubierto es un ajuste; una ambigüedad de redacción es un ajuste. Reflejalo en el veredicto.

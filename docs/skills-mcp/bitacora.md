@@ -22,9 +22,9 @@ git status
 ## Estado actual
 - Actualizado: 2026-11-05 14:50
 - Fase: 3 — MCP usado de verdad por el agente (3.2); sigue documentar MCP (3.4–3.5) y la ficha
-- Avance: 26 de 45 casillas. Hecho: entorno, base, MCP completo y ficha. Falta: skill propia, C-13 y entrega
-- Último commit: `7b3928b` feat: skill revisor-escenarios-turnos generada con skill-creator (version original)
-- Próximo paso concreto: commit de ajustes (2.3) + registro (2.5) + AGENTS/CLAUDE (2.6); después 2.7, sesión nueva del agente
+- Avance: 28 de 45 casillas. Hecho: entorno, base, MCP completo y ficha. Falta: skill propia, C-13 y entrega
+- Último commit: `b677119` feat: adaptar skill… (registro, AGENTS y CLAUDE bien; `SKILL.md` pisado por error, ver H20)
+- Próximo paso concreto: commit de corrección del `SKILL.md`; después 2.7, sesión nueva del agente
 - **Entregas:** repositorio hasta el **domingo 8/11/2026**; video hasta el **20/11/2026** (dato de Lucas, 5/11)
 - Bloqueos / dudas para el profe: `ENTREGA.md` pide el link del video, pero el video vence después. ¿Se entrega el domingo sin link y se agrega el 20, o el link va aparte? (preguntar)
 
@@ -90,8 +90,8 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 - [x] 2.2 Generar la skill propia con ella (guardar el prompt usado) — prompt en `docs/skills-mcp/evidencias/prompt-skill-creator.md`; versión original del agente en commit `7b3928b` (6/11, Big Pickle, 2 min 50 s, solo creó el `SKILL.md`)
 - [ ] 2.3 Revisar y adaptar lo generado al dominio (anotar qué se cambió) — 5 ajustes propuestos por Claude (H19); evidencia = `git diff 7b3928b` del commit de ajustes
 - [x] 2.4 Guardarla en `.opencode/skills/revisor-escenarios-turnos/SKILL.md` — commit `7b3928b`
-- [ ] 2.5 Registrar en `.atl/skill-registry.md` — preparado (sección "Project Skills" + compact rules)
-- [ ] 2.6 Actualizar `AGENTS.md` y `CLAUDE.md` con el mismo texto — preparado (fila en la tabla, sección de la skill, paso 3b del flujo)
+- [x] 2.5 Registrar en `.atl/skill-registry.md` — sección "Project Skills" + compact rules, commit `b677119`
+- [x] 2.6 Actualizar `AGENTS.md` y `CLAUDE.md` con el mismo texto — fila en la tabla, sección de la skill, paso 3b del flujo; commit `b677119` (idénticos)
 - [ ] 2.7 Sesión nueva del agente: comprobar que la encuentra sin ayuda
 
 ## Fase 3 — MCP
@@ -125,6 +125,7 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
 ## Registro de sesiones
 | Fecha | Qué hice | Commits | Qué sigue |
 |-------|----------|---------|-----------|
+| 2026-11-06 | Commit de ajustes: registro y AGENTS/CLAUDE correctos; `SKILL.md` quedó con el contenido del registro (H20) | `b677119` | Corregir `SKILL.md` |
 | 2026-11-06 | `skill-creator` instalada (git, global); skill generada por el agente con el prompt versionado; Claude revisa y propone 5 ajustes; registro y AGENTS/CLAUDE preparados | `7b3928b` | Commit de ajustes; 2.7 |
 | 2026-11-06 | Sesión A: sección MCP en `AGENTS.md`/`CLAUDE.md` (idénticos) y ficha actualizada. El pegado de varias líneas en PowerShell dejó copias a medias; se rehízo en una sola línea | `06247de` | Skill propia |
 | 2026-11-05 (cierre) | Fechas de entrega recibidas; plan acelerado A/B/C + video | sin commit (esta versión se sube al empezar la sesión A) | Sesión A |
@@ -168,3 +169,4 @@ Borrador de estructura del video (≤ 5 min, se completa con el C-13 hecho):
   3. "Un ATENDIDO no debería bloquear" sin cita → se reescribió citando RN-TU-01 (solo `RESERVADO` cuenta).
   4. **No contemplaba reglas nuevas que propone el propio change** (el C-13 propone RN-TU-11, por sillón): las habría tratado como inventadas. Ajuste: leer `proposal.md`/`design.md` y tratarlas como "regla propuesta por el change", exigiendo escenarios y actualización de la KB.
   5. Aunque su descripción menciona sillón/box, **el checklist no tenía ningún borde de sillón**. Ajuste: ítem 11 (mismo sillón con profesionales distintos, sillones distintos, contiguo, cancelado libera, turnos viejos sin sillón).
+- **H20 — Un comodín de Windows pisó la skill (6/11, verificado en GitHub).** En `b677119`, el comando `U "SKILL*.md"` tomó el archivo más reciente que empezaba con "skill": **`skill-registry.md`**, porque Windows no distingue mayúsculas en los nombres. Resultado: `.opencode/skills/revisor-escenarios-turnos/SKILL.md` quedó con el contenido del registro (por eso el commit marcó 211 líneas cambiadas en ese archivo). Se detectó comparando lo subido con lo entregado. Corrección: copiar el `SKILL.md` excluyendo `skill-registry*`. La evidencia del 2.3 se mira con `git diff 7b3928b <commit de corrección> -- .opencode/skills/revisor-escenarios-turnos/SKILL.md`, que salta el commit roto.
