@@ -1,6 +1,6 @@
 ---
 name: revisor-escenarios-turnos
-description: Audita el spec de un change de turnos, agenda, profesionales o recurso físico (sillón/box) contra las reglas de negocio de knowledge-base/05_reglas_de_negocio.md y detecta escenarios faltantes, ambiguos o mal formados. Usarla SIEMPRE después de un propose que toque turnos/agenda/profesionales/sillón-box y antes de aprobar el spec, y también cuando el usuario diga "revisá los escenarios", "¿le falta algún caso al spec?", "auditá el spec de turnos" o pida validar que un spec cubre las reglas RN-TU. No modifica archivos: solo informa.
+description: Audita el spec de un change de turnos, agenda, profesionales o recurso físico (sillón/box) contra las reglas de negocio de knowledge-base/05_reglas_de_negocio.md y detecta escenarios faltantes, ambiguos o mal formados. Usarla SIEMPRE después de un propose que toque turnos/agenda/profesionales/sillón-box y antes de aprobar el spec, y también cuando el usuario diga "revisá los escenarios", "¿le falta algún caso al spec?", "auditá el spec de turnos" o pida validar que un spec cubre las reglas RN-TU. No modifica archivos, solo informa.
 ---
 
 # Revisor de escenarios de turnos
