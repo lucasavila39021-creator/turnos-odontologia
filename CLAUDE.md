@@ -63,13 +63,23 @@ Fuente de verdad: `.atl/skill-registry.md` (generado por `skill-registry` — no
 | **Backend Sec** | Auth/RBAC/validación/hardening | `springboot-security` |
 | **Frontend** | UI agenda/turnos | `frontend-design` |
 | **Testing** | Integración/E2E | `webapp-testing` |
+| **Revisión de specs** | Auditar escenarios de changes de turnos | `revisor-escenarios-turnos` (propia del proyecto) |
 | **Orquestación** | SDD / OPSX / docs | `kb-creator`, `roadmap-generator`, `agents-md-generator`, `skill-registry`, `find-skills` (foundation) |
 
 Cargá la skill correspondiente al contexto ANTES de escribir código.
 
 > Los compact rules de cada skill los resuelve el orquestador desde `.atl/skill-registry.md` (generado por `skill-registry`; no versionado — no está en el repo). Esta tabla solo mapea skill→rol.
 
-Ver registry: [.atl/skill-registry.md](.atl/skill-registry.md) — 6 skills con triggers y compact rules pre-digeridos.
+Ver registry: [.atl/skill-registry.md](.atl/skill-registry.md) — 7 skills (6 de usuario + 1 propia del proyecto) con triggers y compact rules pre-digeridos.
+
+### Skill propia: `revisor-escenarios-turnos`
+
+Ubicación: [.opencode/skills/revisor-escenarios-turnos/SKILL.md](.opencode/skills/revisor-escenarios-turnos/SKILL.md) (versionada en el repo).
+
+- **Cuándo usarla:** después de `propose` de cualquier change que toque turnos, agenda, profesionales o sillón/box, y **antes** de aprobar el spec. También cuando se pida revisar o auditar escenarios.
+- **Qué necesita:** el `spec.md` del change, `knowledge-base/05_reglas_de_negocio.md`, la sección "Leer antes" de `CHANGES.md` y el `proposal.md` / `design.md` del change. Si el spec afirma algo del esquema, la verificación va con el MCP `mysql`.
+- **Qué entrega:** tabla regla → escenario, escenarios faltantes en dado / cuando / entonces con su origen, y veredicto **OK** o **AJUSTAR**.
+- **Cómo revisar su resultado:** cada hallazgo debe citar una regla `RN-xx-nn` o un ítem del checklist; lo que no esté en la knowledge-base tiene que venir marcado como "decisión de dominio a justificar". La skill no edita nada: si el veredicto es AJUSTAR, los cambios al spec los aplica la persona y se vuelve a correr la skill.
 
 ---
 
@@ -85,6 +95,24 @@ El plan de implementación completo está en [CHANGES.md](CHANGES.md). Resumen:
 **Antes de cualquier `/opsx:propose`**: leé [CHANGES.md](CHANGES.md), identificá las dependencias del change y los archivos de "Leer antes".
 
 Dependencias clave: `C-01 → C-02 → C-03` desbloquea todo; `C-05 + C-07 → C-08` es la barrera de agenda (no-superposición).
+
+---
+
+## Integración MCP: MySQL en solo lectura
+
+Servidor MCP `mysql` (`@benborla29/mcp-server-mysql`), declarado en `opencode.json`. Da acceso de **solo lectura** a la base de desarrollo `turnos_db`. Instalación, variables y pruebas: ver la sección MCP del [README](README.md).
+
+- **Para qué:** consultar el esquema **real** (tablas, columnas, índices, restricciones) y datos de ejemplo antes de proponer o diseñar un change. Ejemplo: `SHOW CREATE TABLE turno` antes de diseñar el C-13.
+- **Herramienta:** `mysql_query` (y el recurso `mysql://tables`).
+- **Cuándo usarlo:** en `explore` y `propose` de cualquier change que toque el modelo de datos; para verificar que una migración o un spec coincide con la base.
+- **Cuándo no:** para modificar datos o esquema (las migraciones van por Flyway), ni contra una base que no sea la de desarrollo.
+
+Reglas:
+
+- **NUNCA** responder "según la base" si la herramienta `mysql_query` no está disponible → decirlo explícitamente y frenar. No reemplazarla leyendo las migraciones ni con scripts propios (antecedente: bitácora del TP, H12 y H14).
+- **NUNCA** buscar, leer ni pedir la contraseña del usuario `agente_mcp` → vive solo en la variable de entorno `MYSQL_PASS_AGENTE`, fuera del repo.
+- **NUNCA** intentar escribir (`INSERT`, `UPDATE`, `DELETE`, DDL) → el acceso es de solo lectura en tres niveles (servidor MCP, usuario MySQL y permisos de OpenCode).
+- Al citar un dato de la base, indicar que salió de `mysql_query`. Si difiere de los archivos del repo (por ejemplo, índices que MySQL crea solo para las claves foráneas), manda la base y se anota la diferencia.
 
 ---
 
@@ -113,6 +141,7 @@ Son contrato; romperlas es un defecto. Formato `NUNCA X → hacer Y`:
 1. Leer la KB relevante (knowledge-base/)        → entender el dominio
 2. Identificar el change en CHANGES.md           → respetar dependencias y gates
 3. /opsx:propose C-NN-nombre                     → proposal + design + specs + tasks
+3b. skill revisor-escenarios-turnos               → si toca turnos: veredicto OK antes de seguir
 4. Implementar las tasks (cargando skills)       → respetando las reglas duras
 5. /opsx:archive C-NN-nombre + marcar [x]        → cerrar el change y actualizar CHANGES.md
 ```

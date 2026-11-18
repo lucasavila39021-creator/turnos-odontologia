@@ -1,0 +1,19 @@
+﻿
+C:\Users\Lucas\.local\share\opencode\log\opencode.log:275:timestamp=2026-11-03T10:06:56.666Z level=INFO run=4bf74bb7 
+message=evaluated permission=bash pattern="node \"C:\\Users\\Lucas\\AppData\\Local\\Temp\\opencode\\mcp-client.js\" 
+call mysql_query \"{\\\"sql\\\":\\\"SHOW CREATE TABLE turno\\\"" action.permission=* action.action=allow 
+action.pattern=*
+C:\Users\Lucas\.local\share\opencode\log\opencode.log:340:timestamp=2026-11-03T10:07:34.367Z level=INFO run=4bf74bb7 
+message=evaluated permission=bash pattern="Select-String -Path 
+\"C:\\Users\\Lucas\\AppData\\Roaming\\npm\\node_modules\\@benborla29\\mcp-server-mysql\\dist\\index.js\" -Pattern 
+\"process.env|process.exit|MYSQL_|console.error\" -AllMatches" action.permission=* action.action=allow action.pattern=*
+C:\Users\Lucas\.local\share\opencode\log\opencode.log:409:timestamp=2026-11-03T10:08:26.408Z level=INFO run=4bf74bb7 
+message=evaluated permission=bash pattern="rg -n --hidden -g '!node_modules' 
+\"agente_mcp|MYSQL_PASS_AGENTE|MYSQL_PASS\" . 2>$null" action.permission=* action.action=allow action.pattern=*
+C:\Users\Lucas\.local\share\opencode\log\opencode.log:416:timestamp=2026-11-03T10:08:29.854Z level=INFO run=4bf74bb7 
+message=evaluated permission=grep pattern=agente_mcp|MYSQL_PASS_AGENTE|MYSQL_PASS action.permission=* 
+action.action=allow action.pattern=*
+C:\Users\Lucas\.local\share\opencode\log\opencode.log:566:timestamp=2026-11-05T17:56:52.250Z level=INFO run=a76614d8 
+message=evaluated permission=mysql_mysql_query pattern=* action.permission=* action.action=allow action.pattern=*
+
+

@@ -1,0 +1,2 @@
+lineas de registro
+findstr /i /c:"service=mcp" /c:"timed out" /c:"mysql" "%USERPROFILE%\.local\share\opencode\log\opencode.log" > "%USERPROFILE%\Desktop\mcp-log.txt"
